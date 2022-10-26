@@ -14,6 +14,7 @@ const guildSchema = new Schema({
         match: /^\d{17,19}$/,
         ref: 'member',
         required: true,
+        index: true,
     },
     invite: {
         type: String,

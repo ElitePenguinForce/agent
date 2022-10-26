@@ -6,7 +6,7 @@ const config = require('../config.js');
 
 module.exports = async client => {
     commandArray = [];
-    fs.readdirSync(path.join('..', 'commands')).filter(file => file.endsWith('.js')).forEach(file => {
+    fs.readdirSync(path.join(__dirname, '..', 'commands')).filter(file => file.endsWith('.js')).forEach(file => {
         const command = require(`../commands/${file}`);
         if(!command.active) return;
         client.commands.set(command.data.name, command);

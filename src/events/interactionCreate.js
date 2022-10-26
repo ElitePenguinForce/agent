@@ -64,5 +64,23 @@ module.exports = {
                 console.error(error)
             }
         }
+        else if(interaction.isAutocomplete()){
+            const command = client.commands.get(interaction.commandName);
+            if(!command) return;
+            const subCommandName = interaction.options.getSubcommand(false);
+            const subCommandGroupName = interaction.options.getSubcommandGroup(false);
+            const option = interaction.options.getFocused(true);
+            const response = await command
+                [
+                    'autocomplete$' +
+                    (
+                        subCommandName
+                        ? `${subCommandGroupName ? `${subCommandGroupName}_` : ''}${subCommandName}$`
+                        : ''
+                    ) +
+                    option.name
+                ](interaction, option.value);
+            await interaction.respond(response);
+        }
     }
 }

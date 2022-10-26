@@ -4,7 +4,8 @@
   "description": "",
   "main": "./src/index.js",
   "scripts": {
-    "test": "node ."
+    "test": "node .",
+    "dev": "node --trace-deprecation --inspect -r dotenv/config src/index.js dotenv_config_path=.env"
   },
   "keywords": [],
   "author": "ale#1144",
