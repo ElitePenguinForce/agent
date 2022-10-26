@@ -13,8 +13,8 @@
     "@discordjs/rest": "^1.0.1",
     "chalk": "^4.1.2",
     "discord-api-types": "^0.37.1",
-    "discord.js": "^14.1.2",
+    "discord.js": "^14.6.0",
     "dotenv": "^16.0.1",
-    "firebase": "^9.9.2"
+    "mongoose": "^6.7.0"
   }
 }
