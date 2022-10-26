@@ -28,8 +28,7 @@ const guildSchema = new Schema({
         required: true,
     },
     owner: {
-        type: String,
-        match: /^\d{17,19}$/,
+        type: Schema.Types.ObjectId,
         ref: 'member',
     },
 });
