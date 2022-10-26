@@ -24,8 +24,6 @@ class RegisterCommand extends Command{
                         .setNameLocalization('pt-BR', 'servidor')
                         .setDescription('Em qual das suas equipes esse membro deve ser registrado')
                         .setAutocomplete(true)
-                        .setMinLength(17)
-                        .setMaxLength(19)
                         .setRequired(true),
                 )
                 .addIntegerOption(
@@ -53,7 +51,11 @@ class RegisterCommand extends Command{
     }
 
     async execute(interaction, client){
-
+        console.log(interaction.options.data);
+        await interaction.reply({
+            content: 'test',
+            ephemeral: true,
+        });
     }
 
     async autocomplete$server(interaction, value){
