@@ -10,7 +10,7 @@ const config = require('../config.js');
 class RemoveCommand extends Command{
     constructor(){
         super({
-            active: false,
+            active: true,
             data: new SlashCommandBuilder()
                 .setName('remove')
                 .setNameLocalization('pt-BR', 'remover')
@@ -61,55 +61,58 @@ class RemoveCommand extends Command{
                 ephemeral: true,
             });
         }
-        if(guildDoc.owner === member.id){
-            guildDoc.owner = null;
-            await guildDoc.save();
-        }
-        await memberModel.findOneAndDelete({
+        const memberDoc = await memberModel.findOneAndDelete({
             user: member.id,
             guild: guildId,
         });
-        // await member.roles.remove(config.levels.filter((_, i) => (i !== level)));
-        // await member.roles.add(config.levels[level]);
-        // await interaction.reply(
-        //     `${member} registrado em [${guildDoc.name}](https://discord.gg/${guildDoc.invite}) com sucesso`
-        // );
-        // const invite = await client.fetchInvite(guildDoc.invite).catch(() => null);
-        // if(invite){
-        //     if(invite.guild){
-        //         guildDoc.name = invite.guild.name;
-        //         await guildDoc.save();
-        //     }
-        // }
-        // else{
-        //     await interaction.followUp({
-        //         content: (
-        //             `Por favor adicione um convite válido para o seu servidor utilizando ` +
-        //             `</changeinvite:${interaction.guild.commands.cache.find(cmd => (cmd.name === 'changeinvite')).id}>`
-        //         ),
-        //         ephemeral: true,
-        //     });
-        // }
-        // const memberDocs = await memberModel.find({guild: guildId});
-        // if(memberDocs.length >= 5){
-        //     let role;
-        //     if(guildDoc.role){
-        //         role = interaction.guild.roles.cache.get(guildDoc.role);
-        //     }
-        //     else{
-        //         role = await interaction.guild.roles.create({
-        //             name: guildDoc.name,
-        //             mentionable: true,
-        //         });
-        //         guildDoc.role = role.id;
-        //         await guildDoc.save();
-        //         for(const otherMemberDoc of memberDocs){
-        //             const otherMember = await interaction.guild.members.fetch(otherMemberDoc.user).catch(() => null);
-        //             if(otherMember) await otherMember.roles.add(role);
-        //         }
-        //     }
-        //     await member.roles.add(role);
-        // }
+        if(guildDoc.owner === member.id){
+            guildDoc.owner = null;
+            await guildDoc.save();
+            const ownedGuildExists = await guildModel.exists({owner: member.id});
+            if(!ownedGuildExists) await member.roles.remove(config.levels[2]);
+        }
+        else if(memberDoc.admin){
+            const adminGuildExists = await memberModel.exists({
+                user: member.id,
+                admin: true,
+            });
+            if(!adminGuildExists) await member.roles.remove(config.levels[1]);
+        }
+        else{
+            const modGuildExists = await memberModel.exists({
+                user: member.id,
+                admin: {$ne: true},
+            });
+            if(!modGuildExists) await member.roles.remove(config.levels[0]);
+        }
+        await interaction.reply(
+            `${member} removido de [${guildDoc.name}](https://discord.gg/${guildDoc.invite}) com sucesso`
+        );
+        const invite = await client.fetchInvite(guildDoc.invite).catch(() => null);
+        if(invite){
+            if(invite.guild){
+                guildDoc.name = invite.guild.name;
+                await guildDoc.save();
+            }
+        }
+        else{
+            await interaction.followUp({
+                content: (
+                    `Por favor adicione um convite válido para o seu servidor utilizando ` +
+                    `</changeinvite:${interaction.guild.commands.cache.find(cmd => (cmd.name === 'changeinvite')).id}>`
+                ),
+                ephemeral: true,
+            });
+        }
+        if(guildDoc.role){
+            await member.roles.remove(guildDoc.role);
+            const memberCount = await memberModel.countDocuments({guild: guildId});
+            if(memberCount < 5){
+                await interaction.guild.roles.delete(guildDoc.role);
+                guildDoc.role = null;
+                await guildDoc.save();
+            }
+        }
     }
 
     async autocomplete$server(interaction, value){
@@ -129,3 +132,5 @@ class RemoveCommand extends Command{
         }));
     }
 }
+
+module.exports = new RemoveCommand();
