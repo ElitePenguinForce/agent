@@ -136,7 +136,7 @@ class RegisterCommand extends Command{
         const guildModel = require('../models/guild.js');
         const representing = await guildModel.find({
             representative: interaction.user.id,
-            name: {$regex: new RegExp(value, 'i')},
+            name: {$regex: new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')},
         });
         return representing.map(guildDoc => ({
             name: guildDoc.name,
