@@ -1,5 +1,4 @@
-const { EmbedBuilder } = require('@discordjs/builders');
-const { ContextMenuCommandBuilder, PermissionsBitField, ApplicationCommandType } = require('discord.js');
+const { ContextMenuCommandBuilder, PermissionsBitField, ApplicationCommandType, EmbedBuilder } = require('discord.js');
 const Command = require('../structures/command.js');
 
 class ListstaffsCommand extends Command{
