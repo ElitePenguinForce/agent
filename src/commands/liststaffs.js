@@ -18,7 +18,7 @@ class ListstaffsCommand extends Command{
         });
     }
 
-    async execute(interaction, client){
+    async execute(interaction){
         const memberModel = require('../models/member.js');
         require('../models/guild.js');
         const memberDocs = await memberModel.find({user: interaction.targetUser.id}).populate({
@@ -29,11 +29,11 @@ class ListstaffsCommand extends Command{
             .setColor(0x2f3136)
             .setAuthor({
                 name: `Staffs que ${interaction.targetUser.tag} faz parte`,
-                iconURL: interaction.targetUser.avatarURL(),
+                iconURL: interaction.targetUser.avatarURL({dynamic: true}),
             });
         const ownedGuilds = memberDocs.filter(doc => doc._id.equals(doc.guild.owner));
         if(ownedGuilds.length) embed.addFields({
-            name: 'Dono',
+            name: 'Dono de',
             value: ownedGuilds
                 .map(doc => (
                     `[\`${doc.guild.name}\`](https://discord.gg/${doc.guild.invite})` +
@@ -43,7 +43,7 @@ class ListstaffsCommand extends Command{
         });
         const adminGuilds = memberDocs.filter(doc => (doc.admin && !doc._id.equals(doc.guild.owner)));
         if(adminGuilds.length) embed.addFields({
-            name: 'Administrador',
+            name: 'Administra',
             value: adminGuilds
                 .map(doc => (
                     `[\`${doc.guild.name}\`](https://discord.gg/${doc.guild.invite})` +
@@ -53,7 +53,7 @@ class ListstaffsCommand extends Command{
         });
         const modGuilds = memberDocs.filter(doc => !doc.admin);
         if(modGuilds.length) embed.addFields({
-            name: 'Moderador',
+            name: 'Modera',
             value: modGuilds
                 .map(doc => (
                     `[\`${doc.guild.name}\`](https://discord.gg/${doc.guild.invite})` +
