@@ -66,13 +66,6 @@ class RegisterCommand extends Command{
             ephemeral: true,
         });
         const guildId = interaction.options.getString('server');
-        if(await memberModel.exists({
-            user: member.id,
-            guild: guildId,
-        })) return await interaction.reply({
-            content: 'Esse usuário já está registrado nesse servidor',
-            ephemeral: true,
-        });
         const guildDoc = await guildModel.findById(guildId);
         if(!guildDoc) return await interaction.reply({
             content: 'Servidor não cadastrado no banco de dados',
@@ -85,23 +78,22 @@ class RegisterCommand extends Command{
             });
         }
         const level = interaction.options.getInteger('role');
-        const memberDoc = new memberModel({
-            user: member.id,
-            guild: guildId,
-            admin: !!level,
-        });
         if(level === 2){
             if(guildDoc.owner) return await interaction.reply({
                 content: `O dono desse servidor já está cadastrado como <@${guildDoc.owner}>`,
                 ephemeral: true,
             });
-            await memberDoc.save();
             guildDoc.owner = member.id;
             await guildDoc.save();
         }
-        else{
-            await memberDoc.save();
-        }
+        await memberModel.findOneAndUpdate({
+            user: member.id,
+            guild: guildId,
+        }, {$set: {admin: !!level}}, {
+            upsert: true,
+            setDefaultsOnInsert: true,
+        });
+        await member.roles.remove(config.levels.filter((_, i) => (i !== level)));
         await member.roles.add(config.levels[level]);
         await interaction.reply(
             `${member} registrado em [${guildDoc.name}](https://discord.gg/${guildDoc.invite}) com sucesso`
