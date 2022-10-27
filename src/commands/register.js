@@ -77,6 +77,7 @@ class RegisterCommand extends Command{
                 ephemeral: true,
             });
         }
+        const isOldOwner = (guildDoc.owner === member.id);
         const level = interaction.options.getInteger('role');
         if(level === 2){
             if(guildDoc.owner) return await interaction.reply({
@@ -86,14 +87,37 @@ class RegisterCommand extends Command{
             guildDoc.owner = member.id;
             await guildDoc.save();
         }
-        await memberModel.findOneAndUpdate({
+        else if(guildDoc.owner === member.id){
+            guildDoc.owner = null;
+            await guildDoc.save();
+        }
+        const oldMemberDoc = await memberModel.findOneAndUpdate({
             user: member.id,
             guild: guildId,
         }, {$set: {admin: !!level}}, {
             upsert: true,
             setDefaultsOnInsert: true,
         });
-        await member.roles.remove(config.levels.filter((_, i) => (i !== level)));
+        if(oldMemberDoc){
+            if(isOldOwner){
+                const ownedGuildExists = await guildModel.exists({owner: member.id});
+                if(!ownedGuildExists) await member.roles.remove(config.levels[2]);
+            }
+            else if(oldMemberDoc.admin){
+                const adminGuildExists = await memberModel.exists({
+                    user: member.id,
+                    admin: true,
+                });
+                if(!adminGuildExists) await member.roles.remove(config.levels[1]);
+            }
+            else{
+                const modGuildExists = await memberModel.exists({
+                    user: member.id,
+                    admin: {$ne: true},
+                });
+                if(!modGuildExists) await member.roles.remove(config.levels[0]);
+            }
+        }
         await member.roles.add(config.levels[level]);
         await interaction.reply(
             `${member} registrado em [${guildDoc.name}](https://discord.gg/${guildDoc.invite}) com sucesso`
