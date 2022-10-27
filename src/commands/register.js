@@ -66,7 +66,7 @@ class RegisterCommand extends Command{
             ephemeral: true,
         });
         const guildId = interaction.options.getString('server');
-        if(await memberModel.findOne({
+        if(await memberModel.exists({
             user: member.id,
             guild: guildId,
         })) return await interaction.reply({
@@ -103,10 +103,9 @@ class RegisterCommand extends Command{
             await memberDoc.save();
         }
         await member.roles.add(config.levels[level]);
-        await interaction.reply({
-            content: `${member} registrado em [${guildDoc.name}](https://discord.gg/${guildDoc.invite}) com sucesso`,
-            ephemeral: true,
-        });
+        await interaction.reply(
+            `${member} registrado em [${guildDoc.name}](https://discord.gg/${guildDoc.invite}) com sucesso`
+        );
         const invite = await client.fetchInvite(guildDoc.invite).catch(() => null);
         if(invite){
             if(invite.guild){
@@ -116,7 +115,10 @@ class RegisterCommand extends Command{
         }
         else{
             await interaction.followUp({
-                content: 'Por favor adicione um convite válido para o seu servidor utilizando [comando]',
+                content: (
+                    `Por favor adicione um convite válido para o seu servidor utilizando ` +
+                    `</changeinvite:${interaction.guild.commands.cache.find(cmd => (cmd.name === 'changeinvite')).id}>`
+                ),
                 ephemeral: true,
             });
         }

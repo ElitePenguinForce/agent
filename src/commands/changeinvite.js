@@ -23,7 +23,7 @@ class ChangeInviteCommand extends Command {
                 .addStringOption(
                 new SlashCommandStringOption()
                     .setName('new_invite')
-                    .setNameLocalization('pt-BR', 'novoconvite')
+                    .setNameLocalization('pt-BR', 'novo_convite')
                     .setDescription('O novo convite para o servidor')
                     .setRequired(true),
                 ),
