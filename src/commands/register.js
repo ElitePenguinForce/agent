@@ -109,8 +109,8 @@ class RegisterCommand extends Command{
                 ephemeral: true,
             });
         }
-        const memberCount = await memberModel.countDocuments({guild: guildId});
-        if(memberCount >= 5){
+        const memberDocs = await memberModel.find({guild: guildId});
+        if(memberDocs.length >= 5){
             let role;
             if(guildDoc.role){
                 role = interaction.guild.roles.cache.get(guildDoc.role);
@@ -122,13 +122,12 @@ class RegisterCommand extends Command{
                 });
                 guildDoc.role = role.id;
                 await guildDoc.save();
+                for(const otherMemberDoc of memberDocs){
+                    const otherMember = await interaction.guild.members.fetch(otherMemberDoc.user).catch(() => null);
+                    if(otherMember) await otherMember.roles.add(role);
+                }
             }
             await member.roles.add(role);
-        }
-        else if(guildDoc.role){
-            await interaction.guild.roles.delete(guildDoc.role);
-            guildDoc.role = null;
-            await guildDoc.save();
         }
     }
 
