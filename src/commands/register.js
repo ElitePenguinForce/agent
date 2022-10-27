@@ -1,5 +1,12 @@
-const { SlashCommandBuilder, PermissionsBitField, SlashCommandStringOption, SlashCommandUserOption, SlashCommandIntegerOption } = require("discord.js");
+const {
+    SlashCommandBuilder,
+    PermissionsBitField,
+    SlashCommandStringOption,
+    SlashCommandUserOption,
+    SlashCommandIntegerOption,
+} = require("discord.js");
 const Command = require('../structures/command.js');
+const config = require('../config.js');
 
 class RegisterCommand extends Command{
     constructor(){
@@ -66,14 +73,17 @@ class RegisterCommand extends Command{
             content: 'Esse usuário já está registrado nesse servidor',
             ephemeral: true,
         });
-        const guildDoc = await guildModel.findOne({
-            _id: guildId,
-            representative: interaction.user.id,
-        }).populate('owner');
+        const guildDoc = await guildModel.findById(guildId).populate('owner').populate('representative');
         if(!guildDoc) return await interaction.reply({
             content: 'Servidor não cadastrado no banco de dados',
             ephemeral: true,
         });
+        if((guildDoc.representative.user !== interaction.user.id) && !interaction.member.roles.cache.has(config.guard)){
+            return await interaction.reply({
+                content: 'Apenas o representante desse servidor pode adicionar novos membros a staff',
+                ephemeral: true,
+            });
+        }
         const level = interaction.options.getInteger('role');
         const memberDoc = new memberModel({
             user: member.id,
@@ -133,18 +143,25 @@ class RegisterCommand extends Command{
 
     async autocomplete$server(interaction, value){
         const guildModel = require('../models/guild.js');
-        const representing = await guildModel.aggregate([
-            {$lookup: {
-                from: 'members',
-                localField: 'representative',
-                foreignField: '_id',
-                as: 'representativeDocs',
-            }},
-            {$match: {
-                'representativeDocs.user': interaction.user.id,
-                name: {$regex: new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')},
-            }},
-        ]);
+        const name = {$regex: new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')};
+        const representing = (
+            interaction.member.roles.cache.has(config.guard)
+            ? await guildModel.find({name}).sort({name: 1}).limit(25)
+            : await guildModel.aggregate([
+                {$lookup: {
+                    from: 'members',
+                    localField: 'representative',
+                    foreignField: '_id',
+                    as: 'representativeDocs',
+                }},
+                {$match: {
+                    'representativeDocs.user': interaction.user.id,
+                    name,
+                }},
+                {$sort: {name: 1}},
+                {$limit: 25},
+            ])
+        );
         return representing.map(guildDoc => ({
             name: guildDoc.name,
             value: guildDoc._id,

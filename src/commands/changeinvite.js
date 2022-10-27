@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, PermissionsBitField, SlashCommandStringOption } = require("discord.js");
+const config = require("../config.js");
 const Command = require('../structures/command.js');
 
 class ChangeInviteCommand extends Command {
@@ -32,55 +33,71 @@ class ChangeInviteCommand extends Command {
     async execute(interaction, client) {
         const guildModel = require('../models/guild.js');
         const guildId = interaction.options.getString('server');
-        const guild = await guildModel.findById({ _id: guildId });
+        require('../models/member.js');
+        const guild = await guildModel.findById(guildId).populate('representative');
 
         if (!guild) 
-        return interaction.reply({
-            content: 'Servidor não encontrado ou removido... ID não está cadastrado no sistema',
-            ephemeral: true,
-        })
+            return interaction.reply({
+                content: 'Servidor não encontrado ou removido... ID não está cadastrado no sistema',
+                ephemeral: true,
+            })
         
         //Uma verificação simples para ver se o usuário é representante da equipe, isto serve para quando
         //o comando falhar no passado e o usuário tentar chamá-lo novamente não sendo o representante no presente
-        if (guild.representative !== interaction.user.id) 
-        return await interaction.reply({
-            content: 'Você não é o representante dessa equipe.',
-            ephemeral: true,
-        })
+        if ((guild.representative.user !== interaction.user.id) && !interaction.member.roles.cache.has(config.guard)) 
+            return await interaction.reply({
+                content: 'Você não é o representante dessa equipe.',
+                ephemeral: true,
+            })
 
         const newInvite = interaction.options.getString('new_invite');
         await client.fetchInvite(newInvite)
-        .then(async (invite) => {
-            if (invite.guild.id !== guildId) {
-                return await interaction.reply({
-                    content: 'O convite não é válido para esse servidor',
-                    ephemeral: true,
+            .then(async (invite) => {
+                if (invite.guild.id !== guildId) {
+                    return await interaction.reply({
+                        content: 'O convite não é válido para esse servidor',
+                        ephemeral: true,
+                    });
+                }
+
+                await guildModel.findByIdAndUpdate(guildId, {
+                    invite: invite.code,
+                    name: invite?.guild.name ?? guild.name,
                 });
-            }
 
-            await guildModel.findByIdAndUpdate(guildId, {
-                invite: invite.code,
-                name: invite?.guild.name ?? guild.name,
+                return await interaction.reply({
+                    content: (
+                        `Convite do servidor \`${guild.name}\` alterado com sucesso!\n` +
+                        `Novo convite: ${invite.url}`
+                    ),
+                });
+            }, async () => {
+                //Aqui é feita a verificação se o convite é válido, se não for, retornaremos uma mensagem de erro
+                await interaction.reply({ content: 'Convite inválido... Tente novamente', ephemeral: true })
             });
-
-            return await interaction.reply({
-                content: (
-                    `Convite do servidor \`${guild.name}\` alterado com sucesso!\n` +
-                    `Novo convite: ${invite.url}`
-                ),
-            });
-        }, async () => {
-            //Aqui é feita a verificação se o convite é válido, se não for, retornaremos uma mensagem de erro
-            await interaction.reply({ content: 'Convite inválido... Tente novamente', ephemeral: true })
-        });
     }
 
     async autocomplete$server(interaction, value){
         const guildModel = require('../models/guild.js');
-        const representing = await guildModel.find({
-            representative: interaction.user.id,
-            name: {$regex: new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')},
-        });
+        const name = {$regex: new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')};
+        const representing = (
+            interaction.member.roles.cache.has(config.guard)
+            ? await guildModel.find({name}).sort({name: 1}).limit(25)
+            : await guildModel.aggregate([
+                {$lookup: {
+                    from: 'members',
+                    localField: 'representative',
+                    foreignField: '_id',
+                    as: 'representativeDocs',
+                }},
+                {$match: {
+                    'representativeDocs.user': interaction.user.id,
+                    name,
+                }},
+                {$sort: {name: 1}},
+                {$limit: 25},
+            ])
+        );
         
         return representing.map(guildDoc => ({
             name: guildDoc.name,
