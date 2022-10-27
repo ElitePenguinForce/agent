@@ -133,10 +133,18 @@ class RegisterCommand extends Command{
 
     async autocomplete$server(interaction, value){
         const guildModel = require('../models/guild.js');
-        const representing = await guildModel.find({
-            representative: interaction.user.id,
-            name: {$regex: new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')},
-        });
+        const representing = await guildModel.aggregate([
+            {$lookup: {
+                from: 'members',
+                localField: 'representative',
+                foreignField: '_id',
+                as: 'representativeDocs',
+            }},
+            {$match: {
+                'representativeDocs.user': interaction.user.id,
+                name: {$regex: new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')},
+            }},
+        ]);
         return representing.map(guildDoc => ({
             name: guildDoc.name,
             value: guildDoc._id,
