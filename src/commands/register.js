@@ -102,6 +102,7 @@ class RegisterCommand extends Command{
         else{
             await memberDoc.save();
         }
+        await member.roles.add(config.levels[level]);
         await interaction.reply({
             content: `${member} registrado em [${guildDoc.name}](https://discord.gg/${guildDoc.invite}) com sucesso`,
             ephemeral: true,
