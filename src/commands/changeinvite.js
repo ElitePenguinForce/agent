@@ -4,28 +4,28 @@ const Command = require('../structures/command.js');
 class ChangeInviteCommand extends Command {
     constructor() {
         super({
-        active: true,
-        data: new SlashCommandBuilder()
-            .setName('changeinvite')
-            .setNameLocalization('pt-BR', 'alterarconvite')
-            .setDescription('Altere o convite de um servidor')
-            .setDMPermission(false)
-            .setDefaultMemberPermissions(PermissionsBitField.Flags.ViewChannel)
-            .addStringOption(
-            new SlashCommandStringOption()
-                .setName('server')
-                .setNameLocalization('pt-BR', 'servidor')
-                .setDescription('O servidor que você deseja alterar o convite')
-                .setAutocomplete(true)
-                .setRequired(true),
-            )
-            .addStringOption(
-            new SlashCommandStringOption()
-                .setName('new_invite')
-                .setNameLocalization('pt-BR', 'novoconvite')
-                .setDescription('O novo convite para o servidor')
-                .setRequired(true),
-            ),
+            active: true,
+            data: new SlashCommandBuilder()
+                .setName('changeinvite')
+                .setNameLocalization('pt-BR', 'alterarconvite')
+                .setDescription('Altere o convite de um servidor')
+                .setDMPermission(false)
+                .setDefaultMemberPermissions(PermissionsBitField.Flags.ViewChannel)
+                .addStringOption(
+                new SlashCommandStringOption()
+                    .setName('server')
+                    .setNameLocalization('pt-BR', 'servidor')
+                    .setDescription('O servidor que você deseja alterar o convite')
+                    .setAutocomplete(true)
+                    .setRequired(true),
+                )
+                .addStringOption(
+                new SlashCommandStringOption()
+                    .setName('new_invite')
+                    .setNameLocalization('pt-BR', 'novoconvite')
+                    .setDescription('O novo convite para o servidor')
+                    .setRequired(true),
+                ),
         });
     }
 
@@ -64,7 +64,10 @@ class ChangeInviteCommand extends Command {
             });
 
             return await interaction.reply({
-                content: `Convite do servidor \`${guild.name}\` alterado com sucesso! Novo convite: ${invite.url}`,
+                content: (
+                    `Convite do servidor \`${guild.name}\` alterado com sucesso!\n` +
+                    `Novo convite: ${invite.url}`
+                ),
             });
         }, async () => {
             //Aqui é feita a verificação se o convite é válido, se não for, retornaremos uma mensagem de erro
@@ -86,4 +89,4 @@ class ChangeInviteCommand extends Command {
     }
 }
 
-module.exports = ChangeInviteCommand;
+module.exports = new ChangeInviteCommand();
