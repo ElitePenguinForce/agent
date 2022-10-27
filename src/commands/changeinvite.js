@@ -34,7 +34,7 @@ class ChangeInviteCommand extends Command {
         const guildModel = require('../models/guild.js');
         const guildId = interaction.options.getString('server');
         require('../models/member.js');
-        const guild = await guildModel.findById(guildId).populate('representative');
+        const guild = await guildModel.findById(guildId);
 
         if (!guild) 
             return interaction.reply({
@@ -44,7 +44,7 @@ class ChangeInviteCommand extends Command {
         
         //Uma verificação simples para ver se o usuário é representante da equipe, isto serve para quando
         //o comando falhar no passado e o usuário tentar chamá-lo novamente não sendo o representante no presente
-        if ((guild.representative.user !== interaction.user.id) && !interaction.member.roles.cache.has(config.guard)) 
+        if ((guild.representative !== interaction.user.id) && !interaction.member.roles.cache.has(config.guard)) 
             return await interaction.reply({
                 content: 'Você não é o representante dessa equipe.',
                 ephemeral: true,
@@ -83,20 +83,10 @@ class ChangeInviteCommand extends Command {
         const representing = (
             interaction.member.roles.cache.has(config.guard)
             ? await guildModel.find({name}).sort({name: 1}).limit(25)
-            : await guildModel.aggregate([
-                {$lookup: {
-                    from: 'members',
-                    localField: 'representative',
-                    foreignField: '_id',
-                    as: 'representativeDocs',
-                }},
-                {$match: {
-                    'representativeDocs.user': interaction.user.id,
-                    name,
-                }},
-                {$sort: {name: 1}},
-                {$limit: 25},
-            ])
+            : await guildModel.find({
+                representative: interaction.user.id,
+                name,
+            }).sort({name: 1}).limit(25)
         );
         
         return representing.map(guildDoc => ({

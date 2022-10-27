@@ -73,12 +73,12 @@ class RegisterCommand extends Command{
             content: 'Esse usuário já está registrado nesse servidor',
             ephemeral: true,
         });
-        const guildDoc = await guildModel.findById(guildId).populate('owner').populate('representative');
+        const guildDoc = await guildModel.findById(guildId);
         if(!guildDoc) return await interaction.reply({
             content: 'Servidor não cadastrado no banco de dados',
             ephemeral: true,
         });
-        if((guildDoc.representative.user !== interaction.user.id) && !interaction.member.roles.cache.has(config.guard)){
+        if((guildDoc.representative !== interaction.user.id) && !interaction.member.roles.cache.has(config.guard)){
             return await interaction.reply({
                 content: 'Apenas o representante desse servidor pode adicionar novos membros a staff',
                 ephemeral: true,
@@ -92,11 +92,11 @@ class RegisterCommand extends Command{
         });
         if(level === 2){
             if(guildDoc.owner) return await interaction.reply({
-                content: `O dono desse servidor já está cadastrado como <@${guildDoc.owner.user}>`,
+                content: `O dono desse servidor já está cadastrado como <@${guildDoc.owner}>`,
                 ephemeral: true,
             });
             await memberDoc.save();
-            guildDoc.owner = memberDoc._id;
+            guildDoc.owner = member.id;
             await guildDoc.save();
         }
         else{
@@ -148,20 +148,10 @@ class RegisterCommand extends Command{
         const representing = (
             interaction.member.roles.cache.has(config.guard)
             ? await guildModel.find({name}).sort({name: 1}).limit(25)
-            : await guildModel.aggregate([
-                {$lookup: {
-                    from: 'members',
-                    localField: 'representative',
-                    foreignField: '_id',
-                    as: 'representativeDocs',
-                }},
-                {$match: {
-                    'representativeDocs.user': interaction.user.id,
-                    name,
-                }},
-                {$sort: {name: 1}},
-                {$limit: 25},
-            ])
+            : await guildModel.find({
+                representative: interaction.user.id,
+                name,
+            }).sort({name: 1}).limit(25)
         );
         return representing.map(guildDoc => ({
             name: guildDoc.name,

@@ -10,8 +10,8 @@ const guildSchema = new Schema({
         match: /^\d{17,19}$/,
     },
     representative: {
-        type: Schema.Types.ObjectId,
-        ref: 'member',
+        type: String,
+        match: /^\d{17,19}$/,
         required: true,
         index: true,
     },
@@ -25,10 +25,12 @@ const guildSchema = new Schema({
         minLength: 2,
         maxLength: 100,
         required: true,
+        index: true,
     },
     owner: {
-        type: Schema.Types.ObjectId,
-        ref: 'member',
+        type: String,
+        match: /^\d{17,19}$/,
+        index: true,
     },
 });
 

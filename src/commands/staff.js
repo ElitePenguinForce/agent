@@ -30,7 +30,7 @@ class StaffCommand extends Command{
             ephemeral: true,
         });
         const guildModel = require('../models/guild.js');
-        const guildDoc = await guildModel.findById(guildId).populate('representative').populate('owner');
+        const guildDoc = await guildModel.findById(guildId);
         const invite = await client.fetchInvite(guildDoc.invite).catch(() => null);
         const embed = new EmbedBuilder()
             .setColor(0x2f3136)
@@ -39,8 +39,8 @@ class StaffCommand extends Command{
                 iconURL: invite?.guild.iconURL({dynamic: true}),
             })
             .setDescription(
-                `Representante: <@${guildDoc.representative.user}>` +
-                `${guildDoc.owner ? `\nDono: <@${guildDoc.owner.user}>` : ''}`
+                `Representante: <@${guildDoc.representative}>` +
+                `${guildDoc.owner ? `\nDono: <@${guildDoc.owner}>` : ''}`
             );
         const adminDocs = memberDocs.filter(doc => doc.admin);
         if(adminDocs.length) embed.addFields({
