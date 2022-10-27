@@ -12,8 +12,8 @@ module.exports = {
         for(const memberDoc of memberDocs.filter(doc => doc.guild.role)){
             const memberCount = await memberModel.countDocuments({guild: memberDoc.guild._id});
             if(memberCount <= 5){
-                await guildModel.findByIdAndUpdate(memberDoc.guild._id, {$set: {role: null}});
                 await client.guilds.cache.get(config.guild).roles.delete(memberDoc.guild.role);
+                await guildModel.findByIdAndUpdate(memberDoc.guild._id, {$set: {role: null}});
             }
         }
         await memberModel.deleteMany({user: user.id});
