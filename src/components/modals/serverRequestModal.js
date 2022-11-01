@@ -38,6 +38,7 @@ module.exports = {
             const guildModel = require('../../models/guild.js');
             const guildExists = await guildModel.exists({_id: fetchedInvite.guild.id});
             if(guildExists) errors.push("Esse servidor já faz parte da EPF");
+            if (fetchedInvite.guild.memberCount < 5000) errors.push("O servidor não atingiu os requisitos mínimos");
         }
         if (!parsedRole) errors.push(`Cargo Inválido (${roleInput})`);
 
@@ -47,11 +48,17 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setTitle("Formulário Recusado")
                 .setColor("#d12c2c")
-                .setDescription(`**Enviado por:** ${interaction.user.tag} (${interaction.user.id})\n\n\n**Link permanente do servidor**\n"${fetchedInvite?.url || "Inválido"}"\n\n**Qual o seu cargo no servidor?**\n"${parsedRole || "Inválido"}"\n\n**Conte-nos mais sobre esse servidor.**\n"${serverAbout}"\n\n**Por onde você conheceu a EPF?**\n"${epfAbout}"`)
                 .setFields([
+                    { name: "Enviado por", value: `${interaction.user.tag} (${interaction.user.id})`, inline: true },
+                    { name: "Link permanente do servidor", value: `${fetchedInvite?.url || "Inválido"}`, inline: true },
+                    { name: "Cargo Principal no Servidor", value: `${parsedRole || "Inválido"}`, inline: true },
+                    { name: "Sobre o servidor", value: `${serverAbout}`, inline: false },
+                    { name: "Por onde conheceu a EPF", value: `${epfAbout}`, inline: false },
                     { name: "Recusado pelo Motivo", value: `${errors.join("\n")}`, inline: true },
                     { name: "Recusado por", value: `${client.user} (${client.user.id})`, inline: true }
                 ]);
+
+            await interaction.member.send({ content: `O seu servidor foi recusado automaticamente pelo seguinte motivo:\n${errors.join("\n")}`, ephemeral: true }).catch(() => null);
             
             return await aproveChannel.send({ embeds: [embed] });
         }
@@ -59,8 +66,13 @@ module.exports = {
         const embed = new EmbedBuilder()
             .setTitle(`Novo formulário`)
             .setColor('#fccf03')
-            .setFooter({ text: `${fetchedInvite.guild.id}` })
-            .setDescription(`**Enviado por:** ${interaction.user.tag} (${interaction.user.id})\n\n\n**Link permanente do servidor**\n"${fetchedInvite.url}"\n\n**Qual o seu cargo no servidor?**\n"${parsedRole}"\n\n**Conte-nos mais sobre esse servidor.**\n"${serverAbout}"\n\n**Por onde você conheceu a EPF?**\n"${epfAbout}"`)
+            .setFields([
+                { name: "Enviado por", value: `${interaction.user.tag} (${interaction.user.id})`, inline: true },
+                { name: "Link permanente do servidor", value: `${fetchedInvite?.url || "Inválido"}`, inline: true },
+                { name: "Cargo Principal no Servidor", value: `${parsedRole || "Inválido"}`, inline: true },
+                { name: "Sobre o servidor", value: `${serverAbout}`, inline: false },
+                { name: "Por onde conheceu a EPF", value: `${epfAbout}`, inline: false }
+            ]);
 
         const row = new ActionRowBuilder()
             .setComponents(

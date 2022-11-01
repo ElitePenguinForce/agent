@@ -2,12 +2,12 @@ const { ButtonBuilder, ModalBuilder, EmbedBuilder, ActionRowBuilder, TextInputBu
 
 module.exports = {
     data: {
-        name: `form-button`
+        name: `register-server-form`
     },
     async execute(interaction, client) {
         const confirmationEmbed = new EmbedBuilder()
             .setTitle("Leia antes de continuar")
-            .setDescription("Ao confirmar, você concorda que você será o representante do servidor dentro da EPF (Elite Penguin Force). E que a responsabilidade da sua staff dentro do nosso servidor será inteiramente sua.")
+            .setDescription("Ao confirmar, você concorda que você será o representante do servidor dentro da EPF (Elite Penguin Force). E que a responsabilidade da sua staff dentro do nosso servidor será inteiramente sua.\n\nTenha em mente de que a resposta do formulário será enviada diretamente em sua DM, então mantenha ela aberta para receber a resposta.")
             .setColor(0x2f3136);
         
         const buttonConfirm = new ButtonBuilder()
@@ -29,7 +29,7 @@ module.exports = {
         const collector = reply.createMessageComponentCollector({
             filter,
             time: 60000,
-            max: 1,
+            max: 1
         });
 
         collector.on("collect", async (i) => {
