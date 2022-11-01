@@ -31,13 +31,19 @@ module.exports = {
         
         const errors = [];
         
+        const guildModel = require('../../models/guild.js');
         if (!fetchedInvite) errors.push("Convite Inválido");
         else {
             if (fetchedInvite._expiresTimestamp) errors.push("Convite Expirável");
             if (fetchedInvite.maxUses) errors.push("Convite com limite de uso");
-            const guildModel = require('../../models/guild.js');
-            const guildExists = await guildModel.exists({_id: fetchedInvite.guild.id});
-            if(guildExists) errors.push("Esse servidor já faz parte da EPF");
+            const guildDoc = await guildModel.findById(fetchedInvite.guild.id);
+            if(guildDoc){
+                errors.push(
+                    guildDoc.pending
+                    ? 'Esse servidor já está em processo de avaliação'
+                    : "Esse servidor já faz parte da EPF"
+                );
+            }
             if (fetchedInvite.guild.memberCount < 5000) errors.push("O servidor não atingiu os requisitos mínimos");
         }
         if (!parsedRole) errors.push(`Cargo Inválido (${roleInput})`);
@@ -77,15 +83,30 @@ module.exports = {
         const row = new ActionRowBuilder()
             .setComponents(
                 new ButtonBuilder()
-                    .setCustomId("aprove-form")
+                    .setCustomId(`aprove-server-form:${fetchedInvite.guild.id}`)
                     .setLabel("Aprovar")
                     .setStyle(ButtonStyle.Success),
                 new ButtonBuilder()
-                    .setCustomId("refuse-form")
+                    .setCustomId(`refuse-server-form:${fetchedInvite.guild.id}`)
                     .setLabel("Recusar")
                     .setStyle(ButtonStyle.Danger),
             );
-
+        
+        const newGuildDoc = new guildModel({
+            _id: fetchedInvite.guild.id,
+            representative: interaction.user.id,
+            invite: fetchedInvite.code,
+            name: fetchedInvite.guild.name,
+            owner: (roleInput === 'dono') ? interaction.user.id : null,
+            pending: true,
+        });
+        await newGuildDoc.save();
+        const memberModel = require('../../models/member.js');
+        await memberModel.create({
+            user: interaction.user.id,
+            guild: newGuildDoc._id,
+            admin: ['adm', 'dono'].includes(roleInput),
+        });
         await aproveChannel.send({embeds: [embed], components: [row]});
     }
 }

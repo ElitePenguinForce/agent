@@ -32,6 +32,12 @@ const guildSchema = new Schema({
         match: /^\d{17,19}$/,
         index: true,
     },
+    pending: Boolean,
+});
+
+guildSchema.pre('findOneAndDelete', async () => {
+    const memberModel = require('./member.js');
+    await memberModel.deleteMany({guild: this.getQuery()._id});
 });
 
 module.exports = model('guild', guildSchema);

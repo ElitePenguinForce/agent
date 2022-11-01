@@ -21,7 +21,7 @@ module.exports = {
         } else if (interaction.isButton()) {
             const { buttons } = client;
             const { customId } = interaction;
-            const button = buttons.get(customId);
+            const button = buttons.get(customId.split(':')[0]);
             if (customId.startsWith("collector")) return;
             if (!button) return new Error('Não é um botão');
 
@@ -45,7 +45,7 @@ module.exports = {
         } else if (interaction.type == InteractionType.ModalSubmit) {
             const { modals } = client;
             const { customId} = interaction;
-            const modal = modals.get(customId)
+            const modal = modals.get(customId.split(':')[0])
             if (!modal) return new Error('Não é um modal');
 
             try {

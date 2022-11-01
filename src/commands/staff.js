@@ -30,7 +30,14 @@ class StaffCommand extends Command{
             ephemeral: true,
         });
         const guildModel = require('../models/guild.js');
-        const guildDoc = await guildModel.findById(guildId);
+        const guildDoc = await guildModel.findOne({
+            _id: guildId,
+            pending: false,
+        });
+        if(!guildDoc) return await interaction.reply({
+            content: 'Servidor não encontrado',
+            ephemeral: true,
+        });
         const invite = await client.fetchInvite(guildDoc.invite).catch(() => null);
         const embed = new EmbedBuilder()
             .setColor(0x2f3136)
@@ -61,7 +68,10 @@ class StaffCommand extends Command{
     async autocomplete$server(_, value){
         const guildModel = require('../models/guild.js');
         const guildDocs = await guildModel
-            .find({name: {$regex: new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')}})
+            .find({
+                name: {$regex: new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')},
+                pending: false,
+            })
             .sort({name: 1})
             .limit(25);
         return guildDocs.map(doc => ({
