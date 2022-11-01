@@ -35,6 +35,9 @@ module.exports = {
         else {
             if (fetchedInvite._expiresTimestamp) errors.push("Convite Expirável");
             if (fetchedInvite.maxUses) errors.push("Convite com limite de uso");
+            const guildModel = require('../../models/guild.js');
+            const guildExists = await guildModel.exists({_id: fetchedInvite.guild.id});
+            if(guildExists) errors.push("Esse servidor já faz parte da EPF");
         }
         if (!parsedRole) errors.push(`Cargo Inválido (${roleInput})`);
 
@@ -50,14 +53,14 @@ module.exports = {
                     { name: "Recusado por", value: `${client.user} (${client.user.id})`, inline: true }
                 ]);
             
-            return aproveChannel.send({ embeds: [embed] });
+            return await aproveChannel.send({ embeds: [embed] });
         }
 
         const embed = new EmbedBuilder()
             .setTitle(`Novo formulário`)
             .setColor('#fccf03')
             .setFooter({ text: `${fetchedInvite.guild.id}` })
-            .setDescription(`**Enviado por:** ${interaction.user.tag} (${interaction.user.id})\n\n\n**Link permanente do servidor**\n"${fetchedInvite.url}"\n\n}"\n\n**Qual o seu cargo no servidor?**\n"${parsedRole}"\n\n**Conte-nos mais sobre esse servidor.**\n"${serverAbout}"\n\n**Por onde você conheceu a EPF?**\n"${epfAbout}"`)
+            .setDescription(`**Enviado por:** ${interaction.user.tag} (${interaction.user.id})\n\n\n**Link permanente do servidor**\n"${fetchedInvite.url}"\n\n**Qual o seu cargo no servidor?**\n"${parsedRole}"\n\n**Conte-nos mais sobre esse servidor.**\n"${serverAbout}"\n\n**Por onde você conheceu a EPF?**\n"${epfAbout}"`)
 
         const row = new ActionRowBuilder()
             .setComponents(
@@ -71,6 +74,6 @@ module.exports = {
                     .setStyle(ButtonStyle.Danger),
             );
 
-        aproveChannel.send({embeds: [embed], components: [row]});
+        await aproveChannel.send({embeds: [embed], components: [row]});
     }
 }
