@@ -14,20 +14,30 @@ module.exports = {
         const message = (await formChannel?.messages?.fetch({ limit: 1 }).catch(() => null))?.first();
         
         if (!message || message.author.id !== client.user.id) {
-            const embed = new EmbedBuilder()
-                .setTitle("Embed de form")
+            const registerServerEmbed = new EmbedBuilder()
+                .setTitle("Embed de server")
+                .setDescription("Se você representa um servidor que cumpre os requisitos listados acima e acha que ele merece fazer parte da EPF, clique no botao abaixo e preencha o formulário para enviá-lo para uma avaliação")
+                .setColor("Random");
+            
+            const requestDevRoleEmbed = new EmbedBuilder()
+                .setTitle("Embed de dev")
                 .setDescription("Se você representa um servidor que cumpre os requisitos listados acima e acha que ele merece fazer parte da EPF, clique no botao abaixo e preencha o formulário para enviá-lo para uma avaliação")
                 .setColor("Random");
 
             const row = new ActionRowBuilder()
                 .setComponents(
                     new ButtonBuilder()
-                        .setCustomId("form-button")
-                        .setLabel("Fazer Formulário")
-                        .setStyle(ButtonStyle.Secondary)
+                        .setCustomId("register-server-form")
+                        .setLabel("Formulário de Servidor")
+                        .setStyle(ButtonStyle.Secondary),
+                    new ButtonBuilder()
+                        .setCustomId("request-dev-role-form")
+                        .setLabel("Formulário de Desenvolvedor")
+                        .setDisabled(true)
+                        .setStyle(ButtonStyle.Secondary),
                 );
 
-            formChannel.send({ embeds: [embed], components: [row] });
+            formChannel.send({ embeds: [registerServerEmbed, requestDevRoleEmbed], components: [row] });
         }
     }
 }
