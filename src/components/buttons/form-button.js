@@ -1,61 +1,84 @@
-const { SlashCommandBuilder, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } = require ('discord.js')
+const { ButtonBuilder, ModalBuilder, EmbedBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, ButtonStyle } = require ('discord.js');
 
 module.exports = {
     data: {
         name: `form-button`
     },
     async execute(interaction, client) {
-        const modal = new ModalBuilder()
-        .setCustomId(`serverRequestModal`)
-        .setTitle(`Elite Penguin Force`)
+        const confirmationEmbed = new EmbedBuilder()
+            .setTitle("Leia antes de continuar")
+            .setDescription("Ao confirmar, você concorda que você será o representante do servidor dentro da EPF (Elite Penguin Force). E que a responsabilidade da sua staff dentro do nosso servidor será inteiramente sua.")
+            .setColor("#00000000");
+        
+        const row = new ActionRowBuilder()
+            .setComponents(
+                new ButtonBuilder()
+                    .setCustomId("collector:confirm")
+                    .setLabel("Confirmar")
+                    .setStyle(ButtonStyle.Success),
+                new ButtonBuilder()
+                    .setCustomId("collector:cancel")
+                    .setLabel("Cancelar")
+                    .setStyle(ButtonStyle.Danger)
+            );
+        
+        const reply = await interaction.reply({ embeds: [confirmationEmbed], components: [row], ephemeral: true, fetchReply: true });
 
-        const serverLink = new TextInputBuilder()
-        .setCustomId(`serverLink`)
-        .setLabel(`Link permanente do servidor`)
-        .setRequired(true)
-        .setStyle(TextInputStyle.Short)
-        .setMinLength(10)
-        .setMaxLength(30);
+        const filter = (i) => i.user.id === interaction.user.id;
+        const collector = reply.createMessageComponentCollector({
+            filter,
+            time: 60000
+        });
 
-        const question1 = new TextInputBuilder()
-        .setCustomId(`question1`)
-        .setLabel(`Você representa esse servidor?`)
-        .setRequired(true)
-        .setStyle(TextInputStyle.Short)
-        .setMinLength(3)
-        .setMaxLength(3);
+        collector.on("collect", async (i) => {
+            if (i.customId === "collector:confirm") {
+                const modal = new ModalBuilder()
+                    .setCustomId(`serverRequestModal`)
+                    .setTitle(`Elite Penguin Force`)
 
+                const serverLink = new TextInputBuilder()
+                    .setCustomId(`serverLink`)
+                    .setLabel(`Link permanente do servidor`)
+                    .setRequired(true)
+                    .setStyle(TextInputStyle.Short)
+                    .setMinLength(10)
+                    .setMaxLength(30);
 
-        const question2 = new TextInputBuilder()
-        .setCustomId(`question2`)
-        .setLabel(`Conte-nos mais sobre esse servidor`)
-        .setRequired(true)
-        .setStyle(TextInputStyle.Paragraph)
-        .setMinLength(20)
-        .setMaxLength(150);
+                const serverRole = new TextInputBuilder()
+                    .setCustomId(`serverRole`)
+                    .setLabel(`Qual o seu cargo nesse servidor?`)
+                    .setRequired(true)
+                    .setPlaceholder("( mod | adm | dono )")
+                    .setStyle(TextInputStyle.Paragraph)
+                    .setMinLength(3)
+                    .setMaxLength(4);
 
-        const question3 = new TextInputBuilder()
-        .setCustomId(`question3`)
-        .setLabel(`Por que seu servidor deveria ser aceito?`)
-        .setRequired(true)
-        .setStyle(TextInputStyle.Paragraph)
-        .setMinLength(20)
-        .setMaxLength(250);
+                const serverAbout = new TextInputBuilder()
+                    .setCustomId(`serverAbout`)
+                    .setLabel(`Conte-nos mais sobre esse servidor`)
+                    .setRequired(true)
+                    .setStyle(TextInputStyle.Paragraph)
+                    .setMinLength(20)
+                    .setMaxLength(150);
 
-        const question4 = new TextInputBuilder()
-        .setCustomId(`question4`)
-        .setLabel(`Por onde você conheceu a EPF?`)
-        .setRequired(true)
-        .setStyle(TextInputStyle.Paragraph)
-        .setMinLength(20)
-        .setMaxLength(150);
+                const epfAbout = new TextInputBuilder()
+                    .setCustomId(`epfAbout`)
+                    .setLabel(`Por onde você conheceu a EPF?`)
+                    .setRequired(true)
+                    .setStyle(TextInputStyle.Paragraph)
+                    .setMinLength(20)
+                    .setMaxLength(150);
 
-        modal.addComponents(new ActionRowBuilder().addComponents(serverLink));
-        modal.addComponents(new ActionRowBuilder().addComponents(question1));
-        modal.addComponents(new ActionRowBuilder().addComponents(question2));
-        modal.addComponents(new ActionRowBuilder().addComponents(question3));
-        modal.addComponents(new ActionRowBuilder().addComponents(question4));
+                modal.addComponents(new ActionRowBuilder().addComponents(serverLink));
+                modal.addComponents(new ActionRowBuilder().addComponents(serverRole));
+                modal.addComponents(new ActionRowBuilder().addComponents(serverAbout));
+                modal.addComponents(new ActionRowBuilder().addComponents(epfAbout));
 
-        await interaction.showModal(modal);
+                return i.showModal(modal);
+            }
+
+            await i.deferUpdate();
+            return i.deleteReply();
+        });
     }
 }

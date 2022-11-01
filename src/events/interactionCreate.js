@@ -22,6 +22,7 @@ module.exports = {
             const { buttons } = client;
             const { customId } = interaction;
             const button = buttons.get(customId);
+            if (customId.startsWith("collector")) return;
             if (!button) return new Error('Não é um botão');
 
             try {
