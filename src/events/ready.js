@@ -34,7 +34,6 @@ module.exports = {
                     new ButtonBuilder()
                         .setCustomId("request-dev-role-form")
                         .setLabel("Formulário de Desenvolvedor")
-                        .setDisabled(true)
                         .setStyle(ButtonStyle.Secondary),
                 );
 
