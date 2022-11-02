@@ -29,7 +29,7 @@ module.exports = {
 
     const example = new TextInputBuilder()
         .setCustomId(`example`)
-        .setLabel(`Nos envie um exemplo de um projeto seu.`)
+        .setLabel(`Nos envie um exemplo de um projeto seu`)
         .setRequired(true)
         .setStyle(TextInputStyle.Paragraph)
         .setMinLength(20)
@@ -37,7 +37,7 @@ module.exports = {
 
     const botInvite = new TextInputBuilder()
         .setCustomId(`botInvite`)
-        .setLabel(`Convite do seu bot (Se não tiver, deixe em branco)`)
+        .setLabel(`Convite do seu bot (se houver)`)
         .setStyle(TextInputStyle.Short)
         .setRequired(false)
 
