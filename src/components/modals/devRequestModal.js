@@ -3,7 +3,7 @@ const config = require('../../config');
 
 module.exports = {
     data: {
-        name: 'devRefuseReasonModal'
+        name: 'devRequestModal'
     },
 
     async execute(interaction, client) {
