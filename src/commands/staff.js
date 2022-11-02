@@ -32,7 +32,7 @@ class StaffCommand extends Command{
         const guildModel = require('../models/guild.js');
         const guildDoc = await guildModel.findOne({
             _id: guildId,
-            pending: false,
+            pending: {$ne: true},
         });
         if(!guildDoc) return await interaction.reply({
             content: 'Servidor não encontrado',
@@ -70,7 +70,7 @@ class StaffCommand extends Command{
         const guildDocs = await guildModel
             .find({
                 name: {$regex: new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')},
-                pending: false,
+                pending: {$ne: true},
             })
             .sort({name: 1})
             .limit(25);
