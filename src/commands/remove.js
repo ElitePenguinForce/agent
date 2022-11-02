@@ -107,7 +107,7 @@ class RemoveCommand extends Command{
         if(guildDoc.role){
             await member.roles.remove(guildDoc.role);
             const memberCount = await memberModel.countDocuments({guild: guildId});
-            if(memberCount < 5){
+            if(memberCount < config.membersForRole){
                 await interaction.guild.roles.delete(guildDoc.role);
                 guildDoc.role = null;
                 await guildDoc.save();

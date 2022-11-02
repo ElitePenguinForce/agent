@@ -139,7 +139,7 @@ class RegisterCommand extends Command{
             });
         }
         const memberDocs = await memberModel.find({guild: guildId});
-        if(memberDocs.length >= 5){
+        if(memberDocs.length >= config.membersForRole){
             let role;
             if(guildDoc.role){
                 role = interaction.guild.roles.cache.get(guildDoc.role);
