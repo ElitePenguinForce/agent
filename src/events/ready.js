@@ -6,6 +6,7 @@ module.exports = {
     once: true,
     async execute(client) {
         console.log (`Logado em ${client.user.tag} (${client.user.id})`);
+        client.user.setStatus('invisible');
         const guild = client.guilds.cache.get(config.guild);
         await guild.members.fetch();
         await guild.commands.fetch();
