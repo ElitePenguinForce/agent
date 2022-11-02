@@ -15,8 +15,6 @@ module.exports = {
         .setLabel(`O link do seu perfil no GitHub`)
         .setRequired(true)
         .setStyle(TextInputStyle.Short)
-        .setMinLength(10)
-        .setMaxLength(50);
 
     const experienceInfo = new TextInputBuilder()
         .setCustomId(`experienceInfo`)
@@ -24,16 +22,12 @@ module.exports = {
         .setRequired(true)
         .setPlaceholder("Criação de sites/bots, etc...")
         .setStyle(TextInputStyle.Paragraph)
-        .setMinLength(3)
-        .setMaxLength(4);
 
     const example = new TextInputBuilder()
         .setCustomId(`example`)
         .setLabel(`Nos envie um exemplo de um projeto seu`)
         .setRequired(true)
         .setStyle(TextInputStyle.Paragraph)
-        .setMinLength(20)
-        .setMaxLength(150);
 
     const botInvite = new TextInputBuilder()
         .setCustomId(`botInvite`)
