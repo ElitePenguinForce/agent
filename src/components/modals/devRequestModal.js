@@ -32,7 +32,6 @@ module.exports = {
             { name: "GitHub", value: `${interaction.fields.getTextInputValue("githubLink")}`, inline: true },
             { name: "Atuação", value: `${interaction.fields.getTextInputValue("experienceInfo")}`, inline: true },
             { name: "Exemplo", value: `${interaction.fields.getTextInputValue("example")}`, inline: true },
-            { name: "Motivo", value: `${interaction.fields.getTextInputValue("requestAbout")}`, inline: true },
             { name: "Bot", value: bot ? `${bot?.tag} ${bot?.id}` : "Não tem", inline: true },
             { name: "Convite", value: `${bot ? (botInvite || "Inválido") : "Não tem"}`, inline: true },
         ]);
@@ -40,11 +39,11 @@ module.exports = {
         const row = new ActionRowBuilder()
           .setComponents(
             new ButtonBuilder()
-              .setCustomId(`aprove-dev-form:${interaction.user.id}`)
+              .setCustomId(`aprove-dev-request:${interaction.user.id}`)
               .setLabel("Aprovar")
               .setStyle(ButtonStyle.Success),
             new ButtonBuilder()
-              .setCustomId(`refuse-dev-form:${interaction.user.id}`)
+              .setCustomId(`refuse-dev-request:${interaction.user.id}`)
               .setLabel("Recusar")
               .setStyle(ButtonStyle.Danger)
         );

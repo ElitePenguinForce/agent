@@ -41,20 +41,10 @@ module.exports = {
         .setStyle(TextInputStyle.Short)
         .setRequired(false)
 
-    const requestAbout = new TextInputBuilder()
-        .setCustomId(`requestAbout`)
-        .setLabel(`Por que você quer o cargo de "Desenvolvedor"?`)
-        .setRequired(true)
-        .setStyle(TextInputStyle.Paragraph)
-        .setMinLength(50)
-        .setMaxLength(250);
-
     modal.addComponents(new ActionRowBuilder().addComponents(githubLink));
     modal.addComponents(new ActionRowBuilder().addComponents(experienceInfo));
     modal.addComponents(new ActionRowBuilder().addComponents(example));
-    modal.addComponents(new ActionRowBuilder().addComponents(haveABot));
     modal.addComponents(new ActionRowBuilder().addComponents(botInvite));
-    modal.addComponents(new ActionRowBuilder().addComponents(requestAbout));
 
     return await interaction.showModal(modal);
   }
