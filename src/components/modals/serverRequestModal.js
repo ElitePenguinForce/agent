@@ -8,15 +8,6 @@ module.exports = {
     },
     
     async execute(interaction, client) {
-        const userEmbed = new EmbedBuilder()
-            .setTitle(`Formulário enviado`)
-            .setDescription(`Sua solicitação foi enviada com sucesso\n\nFazer esse formulário **não** garante a entrada da sua comunidade na EPF. \nSua requisição passará por uma analise e a equipe determinará se seu servidor está apto ou não.`)
-            .setColor('#fccf03')
-
-        await interaction.reply({
-            embeds: [userEmbed],
-            ephemeral: true
-        });
 
         const inviteInput = interaction.fields.getTextInputValue("serverLink");
         const fetchedInvite = await client.fetchInvite(inviteInput)
@@ -38,15 +29,29 @@ module.exports = {
             if (fetchedInvite.maxUses) errors.push("Convite com limite de uso");
             const guildDoc = await guildModel.findById(fetchedInvite.guild.id);
             if(guildDoc){
-                errors.push(
-                    guildDoc.pending
-                    ? 'Esse servidor já está em processo de avaliação'
-                    : "Esse servidor já faz parte da EPF"
-                );
+                if(guildDoc.pending){
+                    return await interaction.reply({
+                        content: 'Esse servidor já está em processo de avaliação',
+                        ephemeral: true,
+                    });
+                }
+                else{
+                    errors.push('Esse servidor já faz parte da EPF');
+                }
             }
             if (fetchedInvite.guild.memberCount < 5000) errors.push("O servidor não atingiu os requisitos mínimos");
         }
         if (!parsedRole) errors.push(`Cargo Inválido (${roleInput})`);
+
+        const userEmbed = new EmbedBuilder()
+            .setTitle(`Formulário enviado`)
+            .setDescription(`Sua solicitação foi enviada com sucesso\n\nFazer esse formulário **não** garante a entrada da sua comunidade na EPF. \nSua requisição passará por uma analise e a equipe determinará se seu servidor está apto ou não.`)
+            .setColor('#fccf03')
+
+        await interaction.reply({
+            embeds: [userEmbed],
+            ephemeral: true
+        });
 
         const aproveChannel = client.channels.cache.get(config.aproveChannel);
         
