@@ -35,7 +35,7 @@ const guildSchema = new Schema({
     pending: Boolean,
 });
 
-guildSchema.pre('findOneAndDelete', async () => {
+guildSchema.pre('findOneAndDelete', async function(){
     const memberModel = require('./member.js');
     await memberModel.deleteMany({guild: this.getQuery()._id});
 });
