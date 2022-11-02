@@ -51,6 +51,11 @@ module.exports = {
       await aproveChannel.send({
         embeds: [embed], components: [row]
       });
+
+      await interaction.reply({
+        content: 'Seu pedido foi enviado para avaliação.',
+        ephemeral: true,
+      });
     }
 }
 
