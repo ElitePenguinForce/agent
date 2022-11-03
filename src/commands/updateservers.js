@@ -27,6 +27,7 @@ class UpdateserversCommand extends Command{
             for(const message of messages.values()) await message.delete();
         }
         const guildModel = require('../models/guild.js');
+        let guildCount = 0;
         for(let i = 65; i < 91; i++){
             const letter = String.fromCharCode(i);
             const guildDocs = await guildModel.find({
@@ -34,6 +35,7 @@ class UpdateserversCommand extends Command{
                 pending: {$ne: true},
             });
             if(!guildDocs.length) continue;
+            guildCount += guildDocs.length;
             const embed = new EmbedBuilder()
                 .setTitle(`Comunidades (${letter})`)
                 .setColor(0x2f3136)
@@ -47,6 +49,7 @@ class UpdateserversCommand extends Command{
                 );
             await channel.send({embeds: [embed]});
         }
+        await channel.setTopic(`<:icons_discover:859429432535023666>  | **${guildCount} servidores associados.**`);
         await interaction.editReply('Lista de servidores atualizada');
     }
 }
