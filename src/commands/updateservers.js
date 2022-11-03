@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionsBitField, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionsBitField, EmbedBuilder, escapeMarkdown } = require('discord.js');
 const config = require('../config.js');
 const Command = require('../structures/command.js');
 
@@ -40,7 +40,7 @@ class UpdateserversCommand extends Command{
                 .setDescription(
                     guildDocs
                         .map(doc => {
-                            let str = `[\`${doc.name}\`](https://discord.gg/${doc.invite})`;
+                            let str = `[\`${escapeMarkdown(doc.name)}\`](https://discord.gg/${doc.invite})`;
                             return doc.role ? `${str} | <@&${doc.role}>` : str;
                         })
                         .join('\n'),
