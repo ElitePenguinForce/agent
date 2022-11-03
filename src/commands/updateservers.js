@@ -27,8 +27,8 @@ class UpdateserversCommand extends Command{
             for(const message of messages.values()) await message.delete();
         }
         const guildModel = require('../models/guild.js');
-        for(let i = 0; i < 26; i++){
-            const letter = String.fromCharCode(65 + i);
+        for(let i = 65; i < 91; i++){
+            const letter = String.fromCharCode(i);
             const guildDocs = await guildModel.find({
                 name: {$regex: new RegExp(`^${letter}`, 'i')},
                 pending: {$ne: true},
