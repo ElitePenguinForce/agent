@@ -5,7 +5,7 @@
   "main": "./src/index.js",
   "scripts": {
     "test": "node .",
-    "dev": "node --trace-deprecation --inspect -r dotenv/config src/index.js dotenv_config_path=.env"
+    "dev": "node --trace-deprecation -r dotenv/config src/index.js dotenv_config_path=.env"
   },
   "keywords": [],
   "author": "ElitePenguinForce",
