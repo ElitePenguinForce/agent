@@ -17,7 +17,7 @@ class UpdateserversCommand extends Command{
 
     async execute(interaction, client){
         const channel = client.channels.cache.get(config.serversChannel);
-        await interaction.deferReply();
+        await interaction.deferReply({ephemeral: true});
         const messages = await channel.messages.fetch({limite: 100});
         const minute = 60 * 1000;
         if(messages.last().createdTimestamp > (Date.now() - ((2 * 7 * 24 * 60 * minute) - minute))){
@@ -47,10 +47,7 @@ class UpdateserversCommand extends Command{
                 );
             await channel.send({embeds: [embed]});
         }
-        await interaction.editReply({
-            content: 'Lista de servidores atualizada',
-            ephemeral: true,
-        });
+        await interaction.editReply('Lista de servidores atualizada');
     }
 }
 
