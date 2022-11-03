@@ -40,7 +40,7 @@ class UpdateserversCommand extends Command{
                 .setDescription(
                     guildDocs
                         .map(doc => {
-                            let str = `[\`${doc.name.replace('`', 'ˋ')}\`](https://discord.gg/${doc.invite})`;
+                            let str = `[\`${doc.name.replaceAll('`', 'ˋ')}\`](https://discord.gg/${doc.invite})`;
                             return doc.role ? `${str} | <@&${doc.role}>` : str;
                         })
                         .join('\n'),
