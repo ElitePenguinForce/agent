@@ -47,7 +47,8 @@ class StaffCommand extends Command{
             })
             .setDescription(
                 `Representante: <@${guildDoc.representative}>` +
-                `${guildDoc.owner ? `\nDono: <@${guildDoc.owner}>` : ''}`
+                `${guildDoc.owner ? `\nDono: <@${guildDoc.owner}>` : ''}`,
+                `${guildDoc.role ? `\nCargo: <@&${guildDoc.role}>` : ''}`,
             );
         const adminDocs = memberDocs.filter(doc => doc.admin);
         if(adminDocs.length) embed.addFields({
