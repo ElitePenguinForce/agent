@@ -13,8 +13,8 @@ module.exports = {
       var regex = /discord\.com\/(api\/)?oauth2\/authorize/gi;
       var bot = null, botInvite = null;
 
-      if (invite.value !== null) {
-        if (regex.test(invite.value)) {
+      if (invite !== null) {
+        if (regex.test(invite)) {
           const clientId = invite.split("client_id=")[1].split("&")[0];
           
           bot = await client.users.fetch(clientId).catch(() => null);
