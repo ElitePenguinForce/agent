@@ -18,7 +18,7 @@ class UpdateserversCommand extends Command{
     async execute(interaction, client){
         const channel = client.channels.cache.get(config.serversChannel);
         await interaction.deferReply({ephemeral: true});
-        const messages = await channel.messages.fetch({limite: 100});
+        const messages = await channel.messages.fetch();
         const minute = 60 * 1000;
         if(messages.last().createdTimestamp > (Date.now() - ((2 * 7 * 24 * 60 * minute) - minute))){
             await channel.bulkDelete(100);
