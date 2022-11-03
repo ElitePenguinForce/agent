@@ -20,7 +20,7 @@ class UpdateserversCommand extends Command{
         const messages = await channel.messages.fetch({limite: 100});
         for(const message of messages) await message.delete();
         const guildModel = require('../models/guild.js');
-        for(const i = 0; i < 26; i++){
+        for(let i = 0; i < 26; i++){
             const letter = String.fromCharCode(65 + i);
             const guildDocs = await guildModel.find({
                 name: {$regex: new RegExp(`^${letter}`, 'i')},
