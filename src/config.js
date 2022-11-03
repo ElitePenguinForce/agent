@@ -15,7 +15,7 @@ module.exports = {
         guildFormEmoji: '<:icon_guild:1037801942149242926>',
         developerFormBanner: 'https://cdn.discordapp.com/attachments/946097024804212777/1037798853287620668/Aplicar_Developer.png',
         guildFormBanner: 'https://cdn.discordapp.com/attachments/946097024804212777/1037798730142843011/Aplicar_Servidor.png',
-        developerFormColor: '#E18002',
-        guildFormColor: '#4AA58B'
+        developerFormColor: 0xE18002,
+        guildFormColor: 0x66f392,
     }
 };

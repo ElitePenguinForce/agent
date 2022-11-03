@@ -1,6 +1,6 @@
 {
   "name": "epf",
-  "version": "1.10.16",
+  "version": "1.10.18",
   "description": "",
   "main": "./src/index.js",
   "scripts": {
