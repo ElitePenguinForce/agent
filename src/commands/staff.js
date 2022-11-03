@@ -39,17 +39,15 @@ class StaffCommand extends Command{
             ephemeral: true,
         });
         const invite = await client.fetchInvite(guildDoc.invite).catch(() => null);
+        let description = `Representante: <@${guildDoc.representative}>`;
+        if(guildDoc.owner) description += `\nDono: <@${guildDoc.owner}>`;
         const embed = new EmbedBuilder()
             .setColor(0x2f3136)
             .setAuthor({
                 name: `Staff de ${guildDoc.name}`,
                 iconURL: invite?.guild.iconURL({dynamic: true}),
             })
-            .setDescription(
-                `Representante: <@${guildDoc.representative}>` +
-                `${guildDoc.owner ? `\nDono: <@${guildDoc.owner}>` : ''}`,
-                `${guildDoc.role ? `\nCargo: <@&${guildDoc.role}>` : ''}`,
-            );
+            .setDescription(guildDoc.role ? `${description}\nCargo: <@&${guildDoc.role}>` : description);
         const adminDocs = memberDocs.filter(doc => doc.admin);
         if(adminDocs.length) embed.addFields({
             name: 'Administradores',
