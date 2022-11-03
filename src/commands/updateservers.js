@@ -17,6 +17,7 @@ class UpdateserversCommand extends Command{
 
     async execute(interaction, client){
         const channel = client.channels.cache.get(config.serversChannel);
+        await interaction.deferReply();
         const messages = await channel.messages.fetch({limite: 100});
         for(const message of messages.values()) await message.delete();
         const guildModel = require('../models/guild.js');
@@ -40,7 +41,7 @@ class UpdateserversCommand extends Command{
                 );
             await channel.send({embeds: [embed]});
         }
-        await interaction.reply({
+        await interaction.editReply({
             content: 'Lista de servidores atualizada',
             ephemeral: true,
         });
