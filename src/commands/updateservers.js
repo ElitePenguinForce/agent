@@ -30,7 +30,7 @@ class UpdateserversCommand extends Command{
         for(let i = 65; i < 91; i++){
             const letter = String.fromCharCode(i);
             const guildDocs = await guildModel.find({
-                name: {$regex: new RegExp(`^${letter}`, 'i')},
+                name: {$regex: new RegExp(`^[^a-z]*${letter}`, 'i')},
                 pending: {$ne: true},
             });
             if(!guildDocs.length) continue;
