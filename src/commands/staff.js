@@ -8,7 +8,7 @@ class StaffCommand extends Command{
             data: new SlashCommandBuilder()
                 .setName('staff')
                 .setDescription('Mostra todos os membros da staff desse servidor presentes')
-                .setDMPermission(false)
+                .setDMPermission(true)
                 .setDefaultMemberPermissions(PermissionsBitField.Flags.ViewChannel)
                 .addStringOption(
                     new SlashCommandStringOption()

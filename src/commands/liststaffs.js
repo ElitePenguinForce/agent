@@ -12,7 +12,7 @@ class ListstaffsCommand extends Command{
                     "en-US": 'List staffs',
                     "pt-BR": 'Listar staffs',
                 })
-                .setDMPermission(false)
+                .setDMPermission(true)
                 .setDefaultMemberPermissions(PermissionsBitField.Flags.ViewChannel)
                 .setType(ApplicationCommandType.User),
         });
