@@ -10,10 +10,11 @@ module.exports = {
       const invite = interaction.fields.getTextInputValue("botInvite");
       const aproveChannel = client.channels.cache.get(config.aproveChannel);
       
+      var regex = /discord\.com\/(api\/)?oauth2\/authorize/gi;
       var bot = null, botInvite = null;
 
       if (invite.value !== null) {
-        if (invite.includes("discord.com/oauth2/authorize")) {
+        if (regex.test(invite.value)) {
           const clientId = invite.split("client_id=")[1].split("&")[0];
           
           bot = await client.users.fetch(clientId).catch(() => null);
@@ -32,7 +33,7 @@ module.exports = {
             { name: "GitHub", value: `${interaction.fields.getTextInputValue("githubLink")}`, inline: true },
             { name: "Atuação", value: `${interaction.fields.getTextInputValue("experienceInfo")}`, inline: true },
             { name: "Exemplo", value: `${interaction.fields.getTextInputValue("example")}`, inline: true },
-            { name: "Bot", value: bot ? `${bot?.tag} ${bot?.id}` : "Não tem", inline: true },
+            { name: "Bot", value: bot ? `${bot?.tag} (${bot?.id})` : "Não tem", inline: true },
             { name: "Convite", value: `${bot ? (botInvite || "Inválido") : "Não tem"}`, inline: true },
         ]);
         
