@@ -5,7 +5,7 @@ const Command = require('../structures/command.js');
 class UpdateserversCommand extends Command{
     constructor(){
         super({
-            active: false,
+            active: true,
             data: new SlashCommandBuilder()
                 .setName('updateservers')
                 .setNameLocalization('pt-BR', 'atualizarservidores')
