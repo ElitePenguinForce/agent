@@ -20,6 +20,6 @@ module.exports = {
     embed.setColor('#58e600').setTitle("Formulário Aprovado - Developer");
     await interaction.message.edit({ embeds: [embed], components: [] });
 
-    await interaction[interaction.replied || interaction.deferred ? 'followUp' : 'reply']({ content: "Servidor Aprovado", ephemeral: true });
+    await interaction[interaction.replied || interaction.deferred ? 'followUp' : 'reply']({ content: "Desenvolvedor Aprovado", ephemeral: true });
   }
 }
