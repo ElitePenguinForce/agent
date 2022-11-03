@@ -32,7 +32,10 @@ class UpdateserversCommand extends Command{
                 .setColor(0x2f3136)
                 .setDescription(
                     guildDocs
-                        .map(doc => `[\`${doc.name}\`](https://discord.gg/${doc.invite}) | <@&${doc.role}>`)
+                        .map(doc => {
+                            let str = `[\`${doc.name}\`](https://discord.gg/${doc.invite})`;
+                            return doc.role ? `${str} | <@&${doc.role}>` : str;
+                        })
                         .join('\n'),
                 );
             await channel.send({embeds: [embed]});
