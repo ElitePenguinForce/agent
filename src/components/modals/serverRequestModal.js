@@ -112,6 +112,7 @@ module.exports = {
             guild: newGuildDoc._id,
             admin: ['adm', 'dono'].includes(roleInput),
         });
-        await aproveChannel.send({embeds: [embed], components: [row]});
+        const message = await aproveChannel.send({embeds: [embed], components: [row]});
+        await message.startThread({name: `Server: ${fetchedInvite.guild.name}`});
     }
 }
