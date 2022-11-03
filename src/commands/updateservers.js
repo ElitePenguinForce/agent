@@ -38,7 +38,8 @@ class UpdateserversCommand extends Command{
             guildCount += guildDocs.length;
             const embed = new EmbedBuilder()
                 .setTitle(`Comunidades (${letter})`)
-                .setColor(0x2f3136)
+                .setBanner(`https://cdn.discordapp.com/attachments/946097024804212777/1037824425191542845/Divisoria.png`)
+                .setColor(0x5765f0)
                 .setDescription(
                     guildDocs
                         .map(doc => {

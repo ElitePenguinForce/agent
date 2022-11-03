@@ -21,7 +21,7 @@ module.exports = {
                 .setImage(config.formChannelData.guildFormBanner)
                 .setColor(config.formChannelData.guildFormColor)
                 .setDescription(
-                    `<:green_dot:1037803471077908553> **|** Se você representa um servidor que cumpre os requisitos listados acima e acha que ele merece fazer parte da **Elite Penguin Force**, clique no botão abaixo e preencha o formulário para enviá-lo para uma avaliação.\n`+
+                    `<:green_dot:1037803471077908553> **|** Se você representa um servidor que cumpre os requisitos listados acima e acha que ele merece fazer parte da **Elite Penguin Force**, clique no botão abaixo e preencha o formulário para enviá-lo para uma avaliação.\n\n`+
                     `<:icon_idle_green:1037806417438068766> **| Lembrando:** Você será avisado assim que a avaliação tenha terminado. Por isso lembre de deixar suas "Mensagens Diretas" abertas.`
                 )
                 
@@ -30,7 +30,7 @@ module.exports = {
                 .setImage(config.formChannelData.developerFormBanner)
                 .setColor(config.formChannelData.developerFormColor)
                 .setDescription(
-                    `<:yellow_dot:1037800367171317810> **|** Se você atualmente atua na área da programação que cumpre os requisitos listados acima e quer fazer parte da **Elite Penguin Force** como um Developer, clique no botão abaixo e preencha o formulário para enviá-lo para uma avaliação.\n`+
+                    `<:yellow_dot:1037800367171317810> **|** Se você atualmente atua na área da programação que cumpre os requisitos listados acima e quer fazer parte da **Elite Penguin Force** como um Developer, clique no botão abaixo e preencha o formulário para enviá-lo para uma avaliação.\n\n`+
                     `<:icon_idle:1037801013358379048> **| Lembrando:** Você será avisado assim que a avaliação tenha terminado. Por isso lembre de deixar suas "Mensagens Diretas" abertas.`
                 )
 
