@@ -40,7 +40,7 @@ class UpdateserversCommand extends Command{
                 .setDescription(
                     guildDocs
                         .map(doc => {
-                            let str = `[\`${escapeMarkdown(doc.name)}\`](https://discord.gg/${doc.invite})`;
+                            let str = `[\`${escapeMarkdown(doc.name, {escape: false})}\`](https://discord.gg/${doc.invite})`;
                             return doc.role ? `${str} | <@&${doc.role}>` : str;
                         })
                         .join('\n'),
