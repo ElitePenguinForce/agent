@@ -14,7 +14,7 @@ module.exports = {
 
     const embed = EmbedBuilder.from(interaction.message.embeds[0]);
 
-    const message = await guildMember.send({ content: `Parabéns, você foi aprovado e está apto para receber o cargo de Developer no EPF!` }).catch(() => null);
+    const message = await member.send({ content: `Parabéns, você foi aprovado e está apto para receber o cargo de Developer no EPF!` }).catch(() => null);
     if (!message) await interaction.reply({ content: "Não foi possível entrar em contato com o requisitante do cargo", ephemeral: true });
 
     embed.setColor('#58e600').setTitle("Formulário Aprovado - Developer");
