@@ -113,6 +113,6 @@ module.exports = {
             admin: ['adm', 'dono'].includes(roleInput),
         });
         const message = await aproveChannel.send({embeds: [embed], components: [row]});
-        await message.startThread({name: `Server: ${fetchedInvite.guild.name}`});
+        await message.startThread({name: `Server ${fetchedInvite.guild.name}`});
     }
 }

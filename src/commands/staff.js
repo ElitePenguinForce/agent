@@ -46,6 +46,7 @@ class StaffCommand extends Command{
             .setAuthor({
                 name: `Staff de ${guildDoc.name}`,
                 iconURL: invite?.guild.iconURL({dynamic: true}),
+                url: `https://discord.gg/${guildDoc.invite}`,
             })
             .setDescription(guildDoc.role ? `${description}\nCargo: <@&${guildDoc.role}>` : description);
         const adminDocs = memberDocs.filter(doc => doc.admin);

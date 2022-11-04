@@ -53,7 +53,7 @@ module.exports = {
             embeds: [embed], components: [row]
         });
 
-        await message.startThread({ name: `Dev: ${interaction.user.username}` });
+        await message.startThread({ name: `Dev ${interaction.user.tag}` });
 
         await interaction.reply({
             content: 'Seu pedido foi enviado para avaliação.',
