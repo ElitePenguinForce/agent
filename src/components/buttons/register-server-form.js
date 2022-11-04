@@ -7,7 +7,15 @@ module.exports = {
     async execute(interaction, client) {
         const confirmationEmbed = new EmbedBuilder()
             .setTitle("Leia antes de continuar")
-            .setDescription("Ao confirmar, você concorda que você será o representante do servidor dentro da EPF (Elite Penguin Force). E que a responsabilidade da sua staff dentro do nosso servidor será inteiramente sua.\n\nTenha em mente de que a resposta do formulário será enviada diretamente em sua DM, então mantenha ela aberta para receber a resposta.")
+            .setDescription(
+                "Esse formulário deve ser preenchido para associar um **novo servidor** à EPF, se você deseja apenas " +
+                "ser registrado em um servidor que já faz parte da comunidade, por favor peça para o representante do" +
+                " servidor em questão te registrar.\n\n" +
+                "Ao confirmar, você concorda que você será o representante do servidor dentro da EPF (Elite Penguin " +
+                "Force). E que a responsabilidade da sua staff dentro do nosso servidor será inteiramente sua.\n\n" +
+                "Tenha em mente de que a resposta do formulário será enviada diretamente em sua DM, então mantenha " +
+                "ela aberta para receber a resposta."
+            )
             .setColor(0x2f3136);
         
         const buttonConfirm = new ButtonBuilder()
