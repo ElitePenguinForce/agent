@@ -1,14 +1,14 @@
 
 # Agent
 
-> Agent é um bot privado, desenvolvido com Nodejs e Discord.js, com o propósito de automatizar tarefas dentro de um servidor de Discord chamado ["Elite Club Penguin"](https://discord.gg/epf). O servidor reúne administradores, moderadores e desenvolvedores de grandes servidores brasileiros, juntos, formamos uma comunidade onde compartilhamos experiências de administração, ferramentas, metodologias, serviços e muito mais.
+> Agent é um bot privado, desenvolvido com Nodejs e Discord.js, com o propósito de automatizar tarefas dentro de um servidor de Discord chamado ["Elite Penguin Force"](https://discord.gg/epf). O servidor reúne administradores, moderadores e desenvolvedores de grandes servidores brasileiros, juntos, formamos uma comunidade onde compartilhamos experiências de administração, ferramentas, metodologias, serviços e muito mais.
 
 <p align='middle'>
   <img src="https://user-images.githubusercontent.com/32278696/200096419-aeb7c30a-f341-4f36-a7f7-b37aab27861e.png" width='25%'/>
 </p>
 
 <p align='middle'>
-  <strong>Elite Club Penguin<strong>
+  <strong>Elite Penguin Force<strong>
 </p>
 
 ## Testando localmente
