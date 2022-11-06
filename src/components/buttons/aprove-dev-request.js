@@ -31,6 +31,9 @@ module.exports = {
                 content: `<:icons_djoin:875754472834469948> O membro **${member}** entrou como desenvolvedor na EPF`,
                 username: interaction.guild.name,
                 avatarURL: interaction.guild.iconURL(),
+                allowedMentions: {
+                  users: []
+                }
             })
         })
   }
