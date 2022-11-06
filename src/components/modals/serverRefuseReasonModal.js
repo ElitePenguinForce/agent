@@ -18,6 +18,8 @@ module.exports = {
 
         await interaction.message.edit({ embeds: [embed], components: [] });
 
+        await interaction.message.thread.setArchived(true);
+
         const guildModel = require('../../models/guild.js');
         const guildDoc = await guildModel.findByIdAndDelete(interaction.customId.split(':')[1]);
 

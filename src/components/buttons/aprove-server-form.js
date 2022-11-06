@@ -38,6 +38,8 @@ module.exports = {
         embed.setColor('#58e600').setTitle("Formulário Aprovado");
         await interaction.message.edit({ embeds: [embed], components: [] });
 
+        await interaction.message.thread.setArchived(true);
+
         await interaction[interaction.replied || interaction.deferred ? 'followUp' : 'reply']({ content: "Servidor Aprovado", ephemeral: true });
     }
 }

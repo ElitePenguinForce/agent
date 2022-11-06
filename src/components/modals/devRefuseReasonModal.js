@@ -18,6 +18,8 @@ module.exports = {
 
         await interaction.message.edit({ embeds: [embed], components: [] });
 
+        await interaction.message.thread.setArchived(true);
+
         const member = await interaction.guild.members.fetch(interaction.customId.split(':')[1]).catch(() => null);
         const content = 'Lamentamos informar que a sua requisição de cargo de desenvolvedor na EPF foi recusada.';
         if (member) {
