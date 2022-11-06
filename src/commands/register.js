@@ -150,6 +150,7 @@ class RegisterCommand extends Command{
                     mentionable: true,
                     color: 0x607D8B,
                     position: interaction.guild.roles.cache.get(config.serversDivRole).position + 1,
+                    permissions: 0,
                 });
                 guildDoc.role = role.id;
                 await guildDoc.save();
