@@ -26,9 +26,9 @@ module.exports = {
   
     const webhook = parseWebhookURL(process.env.OFFTOPIC_WEBHOOK);
     await interaction.client.fetchWebhook(webhook.id, webhook.token)
-        .then((webhook) => {
-            webhook.send({
-                content: `<:icons_djoin:875754472834469948> O membro **${member}** entrou como desenvolvedor na EPF`,
+        .then(async (webhook) => {
+            await webhook.send({
+                content: `<:icons_djoin:875754472834469948> O membro ${member} foi aprovado como desenvolvedor na EPF`,
                 username: interaction.guild.name,
                 avatarURL: interaction.guild.iconURL(),
                 allowedMentions: {
