@@ -13,7 +13,7 @@ module.exports = {
                 await command.execute(interaction, client);
             } catch (error) {
                 console.error(error)
-                await interaction.reply({
+                await interaction[interaction.replied || interaction.deferred ? 'followUp' : 'reply']({
                     content: `Não foi possível executar esse comando no momento`,
                     ephemeral: true
                 });
