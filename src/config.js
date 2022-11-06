@@ -17,5 +17,6 @@ module.exports = {
         guildFormBanner: 'https://cdn.discordapp.com/attachments/946097024804212777/1037798730142843011/Aplicar_Servidor.png',
         developerFormColor: 0xE18002,
         guildFormColor: 0x66f392,
-    }
+    },
+    serversDivRole: '822191650381365289',
 };

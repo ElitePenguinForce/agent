@@ -47,16 +47,17 @@ module.exports = {
     formChannel: '', // ID do canal onde será enviado o botão para fazer os formulários
     levels: ['', '', ''], // IDs dos cargos de Moderador, Administrador e Dono, respectivamente
     logs: '', // ID do canal de log
-    membersForRole: 5, // Quantidade mínima de membros registrados em uma staff para ser criado o cargo exclusivo do servidor
+    membersForRole: 5, // Quantidade mínima de membros registrados em uma staff para ser criado o cargo do servidor
     serversChannel: '', // ID do canal onde serão enviados as embeds contendo todos os servidores registrados
     formChannelData: {
-        developerFormEmoji: '', // Emoji
-        guildFormEmoji: '', // Emoji
+        developerFormEmoji: '', // Emoji do botão de formulário de desenvolvedor
+        guildFormEmoji: '', // Emoji do botão de formulário de novo servidor
         developerFormBanner: '', // Url do banner da embed do formulário de devenvolvedor
         guildFormBanner: '', // Url do banner da embed do formulário de servidor
-        developerFormColor: 0xE18002, // Cor em hexadecimal
-        guildFormColor: 0x66f392, // Cor em hexadecimal
-    }
+        developerFormColor: 0xE18002, // Cor do embed de formulário de desenvolvedor
+        guildFormColor: 0x66f392, // Cor do embed de formulário de novo servidor
+    },
+    serversDivRole: '', // Id do cargo imediatamente abaixo dos cargos de servidores
 };
 ```
 

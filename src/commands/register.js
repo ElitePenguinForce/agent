@@ -148,6 +148,8 @@ class RegisterCommand extends Command{
                 role = await interaction.guild.roles.create({
                     name: guildDoc.name,
                     mentionable: true,
+                    color: 0x607D8B,
+                    position: interaction.guild.roles.cache.get(config.serversDivRole).position + 1,
                 });
                 guildDoc.role = role.id;
                 await guildDoc.save();
