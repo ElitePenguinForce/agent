@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require("discord.js");
+const { EmbedBuilder, parseWebhookURL } = require("discord.js");
 const config = require("../../config");
 const guildModel = require("../../models/guild");
 
@@ -41,5 +41,15 @@ module.exports = {
         await interaction.message.thread.setArchived(true);
 
         await interaction[interaction.replied || interaction.deferred ? 'followUp' : 'reply']({ content: "Servidor Aprovado", ephemeral: true });
+
+        const webhook = parseWebhookURL(process.env.OFFTOPIC_WEBHOOK);
+        await interaction.client.fetchWebhook(webhook.id, webhook.token)
+            .then((webhook) => {
+                webhook.send({
+                    content: `<:icons_djoin:875754472834469948> O servidor **${guildDoc.name}** entrou para a EPF`,
+                    username: interaction.guild.name,
+                    avatarURL: interaction.guild.iconURL(),
+                })
+            })
     }
 }
