@@ -32,6 +32,7 @@ Antes de iniciar o projeto, é importante criar um arquivo `.env` na raiz do dir
 ```env
 DISCORD_TOKEN=''
 MONGOURL=''
+OFFTOPIC_WEBHOOK=''
 ```
 
 É importante também configurar o arquivo que está localizado no caminho `src/config.js`, caso contrário sua aplicação irá crashar instantâneamente.

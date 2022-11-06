@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require("discord.js");
+const { EmbedBuilder, parseWebhookURL } = require("discord.js");
 const config = require('../../config');
 
 module.exports = {
@@ -23,5 +23,18 @@ module.exports = {
     await interaction.message.thread.setArchived(true);
 
     await interaction[interaction.replied || interaction.deferred ? 'followUp' : 'reply']({ content: "Desenvolvedor Aprovado", ephemeral: true });
+  
+    const webhook = parseWebhookURL(process.env.OFFTOPIC_WEBHOOK);
+    await interaction.client.fetchWebhook(webhook.id, webhook.token)
+        .then(async (webhook) => {
+            await webhook.send({
+                content: `<:icons_djoin:875754472834469948> O membro ${member} foi aprovado como desenvolvedor na EPF`,
+                username: interaction.guild.name,
+                avatarURL: interaction.guild.iconURL(),
+                allowedMentions: {
+                  users: []
+                }
+            })
+        })
   }
 }
