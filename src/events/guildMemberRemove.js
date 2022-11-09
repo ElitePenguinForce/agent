@@ -31,11 +31,8 @@ module.exports = {
                 await guildModel.findByIdAndUpdate(memberDoc.guild._id, {$set: {role: null}});
             }
         }
+        await memberModel.deleteMany({user: user.id});
         const representingDocs = await guildModel.find({representative: user.id});
-        await memberModel.deleteMany({
-            user: user.id,
-            guild: {$nin: representingDocs.map(doc => doc._id)},
-        });
         if(representingDocs.length){
             const embed = new EmbedBuilder()
                 .setColor(0x2f3136)
