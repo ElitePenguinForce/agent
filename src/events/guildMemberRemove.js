@@ -33,6 +33,7 @@ module.exports = {
         }
         await memberModel.deleteMany({user: user.id});
         const representingDocs = await guildModel.find({representative: user.id});
+        await guildModel.updateMany({representative: user.id}, {$set: {representative: config.agent}});
         if(representingDocs.length){
             const embed = new EmbedBuilder()
                 .setColor(0x2f3136)
