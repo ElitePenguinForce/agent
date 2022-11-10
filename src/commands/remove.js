@@ -92,9 +92,9 @@ class RemoveCommand extends Command{
         const invite = await client.fetchInvite(guildDoc.invite).catch(() => null);
         if(invite){
             if(invite.guild){
+                if (guildDoc.name !== invite.guild.name) needUpdate = true
                 guildDoc.name = invite.guild.name;
                 await guildDoc.save();
-                needUpdate = true;
             }
         }
         else{
