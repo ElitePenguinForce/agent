@@ -50,9 +50,8 @@ class UpdateserversCommand extends Command{
                     await interaction.editReply({ content: 'Operação cancelada', components: [] });
                     return;
                 }
-                await interaction.editReply({ content: 'Atualizando os servidores...', components: [] });
-                await updateGuildsChannel(client);
-                await interaction.editReply('Servidores Atualizados');
+                await interaction.editReply({ content: 'Lista de servidores atualizada', components: [] });
+                client.emit('guildUpdate', true);
             })
 
             collector.on('end', async (_, reason) => {
@@ -65,7 +64,8 @@ class UpdateserversCommand extends Command{
 
             return;
         }
-        await updateGuildsChannel(client);
+
+        client.emit('guildUpdate');
         await interaction.editReply('Lista de servidores atualizada');
     }
 }

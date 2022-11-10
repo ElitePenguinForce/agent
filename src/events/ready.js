@@ -54,8 +54,8 @@ module.exports = {
         // que a ela não foi finalizada devidamente
         const constantsModel = require('../models/constants');
         const constants = await constantsModel.getConstants();
-        if (constants.updatingGuildsChannel) {
-            await constantsModel.updateConstants({ updatingGuildsChannel: false });
+        if (constants.updatingGuildsChannel || constants.scheduledUpdate) {
+            await constantsModel.updateConstants({ updatingGuildsChannel: false, scheduledUpdate: false });
             client.emit('guildUpdate');
         }
     }

@@ -13,6 +13,10 @@ const constantsSchema = new Schema({
   updatingGuildsChannel: {
     type: Boolean,
     default: false
+  },
+  scheduledUpdate: {
+    type: Boolean,
+    default: false
   }
 });
 
