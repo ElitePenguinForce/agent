@@ -88,11 +88,13 @@ class RemoveCommand extends Command{
         await interaction.reply(
             `${member} removido de [${guildDoc.name}](https://discord.gg/${guildDoc.invite}) com sucesso`
         );
+        let needUpdate = false;
         const invite = await client.fetchInvite(guildDoc.invite).catch(() => null);
         if(invite){
             if(invite.guild){
                 guildDoc.name = invite.guild.name;
                 await guildDoc.save();
+                needUpdate = true;
             }
         }
         else{
@@ -111,8 +113,11 @@ class RemoveCommand extends Command{
                 await interaction.guild.roles.delete(guildDoc.role);
                 guildDoc.role = null;
                 await guildDoc.save();
+                needUpdate = true;
             }
         }
+
+        if (needUpdate) client.emit('guildUpdate')
     }
 
     async autocomplete$server(interaction, value){
