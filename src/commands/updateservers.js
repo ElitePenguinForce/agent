@@ -51,7 +51,7 @@ class UpdateserversCommand extends Command{
                     return;
                 }
                 await interaction.editReply({ content: 'Lista de servidores atualizada', components: [] });
-                client.emit('guildUpdate', true);
+                client.emit('updateGuilds', true);
             })
 
             collector.on('end', async (_, reason) => {
@@ -65,7 +65,7 @@ class UpdateserversCommand extends Command{
             return;
         }
 
-        client.emit('guildUpdate');
+        client.emit('updateGuilds');
         await interaction.editReply('Lista de servidores atualizada');
     }
 }

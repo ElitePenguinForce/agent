@@ -56,7 +56,7 @@ module.exports = {
         const constants = await constantsModel.getConstants();
         if (constants.updatingGuildsChannel || constants.scheduledUpdate) {
             await constantsModel.updateConstants({ updatingGuildsChannel: false, scheduledUpdate: false });
-            client.emit('guildUpdate');
+            client.emit('updateGuilds');
         }
     }
 }

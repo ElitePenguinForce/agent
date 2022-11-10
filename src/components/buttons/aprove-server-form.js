@@ -49,7 +49,7 @@ module.exports = {
             await interaction.editReply("Servidor Aprovado");
         }
 
-        client.emit('guildUpdate')
+        client.emit('updateGuilds')
 
         const webhook = parseWebhookURL(process.env.OFFTOPIC_WEBHOOK);
         await interaction.client.fetchWebhook(webhook.id, webhook.token)

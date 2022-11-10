@@ -1,7 +1,7 @@
 let timeout;
 
 module.exports = {
-  name: 'guildUpdate',
+  name: 'updateGuilds',
   execute: async (forceUpdate = false, client) => {
     const constantsModel = require('../models/constants');
     let constants = await constantsModel.getConstants();
