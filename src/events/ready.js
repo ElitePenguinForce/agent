@@ -49,5 +49,14 @@ module.exports = {
 
             formChannel.send({ embeds: [registerServerEmbed, requestDevRoleEmbed], components: [row] });
         }
+
+        // se crashar ou reiniciar no meio de uma atualização, ele vai refazer essa atualização já
+        // que a ela não foi finalizada devidamente
+        const constantsModel = require('../models/constants');
+        const constants = await constantsModel.getConstants();
+        if (constants.updatingGuildsChannel) {
+            await constantsModel.updateConstants({ updatingGuildsChannel: false });
+            client.emit('guildUpdate');
+        }
     }
 }
