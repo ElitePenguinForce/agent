@@ -29,6 +29,7 @@ module.exports = {
             if(memberCount <= config.membersForRole){
                 await client.guilds.cache.get(config.guild).roles.delete(memberDoc.guild.role);
                 await guildModel.findByIdAndUpdate(memberDoc.guild._id, {$set: {role: null}});
+                client.emit('updateGuilds', false)
             }
         }
         await memberModel.deleteMany({user: user.id});

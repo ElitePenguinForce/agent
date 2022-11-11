@@ -49,6 +49,8 @@ module.exports = {
             await interaction.editReply("Servidor Aprovado");
         }
 
+        client.emit('updateGuilds', false)
+
         const webhook = parseWebhookURL(process.env.OFFTOPIC_WEBHOOK);
         await interaction.client.fetchWebhook(webhook.id, webhook.token)
             .then(async (webhook) => {

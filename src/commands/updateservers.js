@@ -1,5 +1,4 @@
-const { SlashCommandBuilder, PermissionsBitField, EmbedBuilder, escapeMarkdown } = require('discord.js');
-const config = require('../config.js');
+const { SlashCommandBuilder, PermissionsBitField, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const Command = require('../structures/command.js');
 
 class UpdateserversCommand extends Command{
@@ -16,41 +15,54 @@ class UpdateserversCommand extends Command{
     }
 
     async execute(interaction, client){
-        const channel = client.channels.cache.get(config.serversChannel);
+        const constantsModel = require('../models/constants');
+        const constants = await constantsModel.getConstants();
+        if (constants.updatingGuildsChannel) return await interaction.reply({
+            content: 'Uma atualização já foi solicitada, aguarde o término da atualização para solicitar novamente.',
+            ephemeral: true
+        });
         await interaction.deferReply({ephemeral: true});
-        const messages = await channel.messages.fetch();
-        const minute = 60 * 1000;
-        if(messages.last().createdTimestamp > (Date.now() - ((2 * 7 * 24 * 60 * minute) - minute))){
-            await channel.bulkDelete(100);
-        }
-        else{
-            for(const message of messages.values()) await message.delete();
-        }
-        const guildModel = require('../models/guild.js');
-        let guildCount = 0;
-        for(let i = 65; i < 91; i++){
-            const letter = String.fromCharCode(i);
-            const guildDocs = await guildModel.find({
-                name: {$regex: new RegExp(`^[^a-z]*${letter}`, 'i')},
-                pending: {$ne: true},
+        if ((new Date() - constants.lastGuildsChannelUpdate) < 600000) {
+            const confirmButton = new ButtonBuilder()
+                .setCustomId('collector:confirm')
+                .setLabel('Confirmar')
+                .setStyle(ButtonStyle.Success);
+            const cancelButton = new ButtonBuilder()
+                .setCustomId('collector:cancel')
+                .setLabel('Cancelar')
+                .setStyle(ButtonStyle.Danger);
+            
+            const reply = await interaction.editReply({
+                content: 'A última atualização foi a menos de 10 minutos, deseja atualizar novamente?',
+                components: [new ActionRowBuilder().setComponents(confirmButton, cancelButton)]
+            })
+
+            const collector = reply.createMessageComponentCollector({
+                time: 60000,
+                filter: (i) => i.user.id === interaction.user.id,
+                max: 1
             });
-            if(!guildDocs.length) continue;
-            guildCount += guildDocs.length;
-            const embed = new EmbedBuilder()
-                .setTitle(`Comunidades (${letter})`)
-                .setImage(`https://cdn.discordapp.com/attachments/946097024804212777/1037824425191542845/Divisoria.png`)
-                .setColor(0x5765f0)
-                .setDescription(
-                    guildDocs
-                        .map(doc => {
-                            let str = `[\`${doc.name.replaceAll('`', 'ˋ')}\`](https://discord.gg/${doc.invite})`;
-                            return doc.role ? `${str} | <@&${doc.role}>` : str;
-                        })
-                        .join('\n'),
-                );
-            await channel.send({embeds: [embed]});
+
+            collector.on('collect', async (i) => {
+                if (i.customId === 'collector:cancel') {
+                    await i.update({ content: 'Operação cancelada', components: [] });
+                    return;
+                }
+                await i.update({ content: 'Lista de servidores atualizada', components: [] });
+                client.emit('updateGuilds', true);
+            })
+
+            collector.on('end', async (_, reason) => {
+                if (reason === 'time') {
+                    await interaction.editReply({ content: 'Operação cancelada', components: [] });
+                    return;
+                }
+            })
+
+            return;
         }
-        await channel.setTopic(`<:icons_discover:859429432535023666>  | **${guildCount} servidores associados.**`);
+
+        client.emit('updateGuilds', false);
         await interaction.editReply('Lista de servidores atualizada');
     }
 }
