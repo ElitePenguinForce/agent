@@ -2,7 +2,7 @@ let timeout;
 
 module.exports = {
   name: 'updateGuilds',
-  execute: async (forceUpdate = false, client) => {
+  execute: async (forceUpdate, client) => {
     const constantsModel = require('../models/constants');
     let constants = await constantsModel.getConstants();
 
@@ -20,7 +20,7 @@ module.exports = {
         }
         await updateGuildsChannel(client);
       } catch(err) {
-        console.log(err)
+        console.error(err)
       }
       return;
     }
@@ -31,7 +31,7 @@ module.exports = {
       try {
         await updateGuildsChannel(client);
       } catch(err) {
-        console.log(err);
+        console.error(err);
       } finally {
         await constantsModel.updateConstants({ scheduledUpdate: false });
       }

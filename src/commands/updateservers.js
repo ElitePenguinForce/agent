@@ -1,6 +1,5 @@
 const { SlashCommandBuilder, PermissionsBitField, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const Command = require('../structures/command.js');
-const updateGuildsChannel = require('../utils/updateGuildsChannel.js');
 
 class UpdateserversCommand extends Command{
     constructor(){
@@ -45,18 +44,16 @@ class UpdateserversCommand extends Command{
             });
 
             collector.on('collect', async (i) => {
-                await i.deferUpdate()
                 if (i.customId === 'collector:cancel') {
-                    await interaction.editReply({ content: 'Operação cancelada', components: [] });
+                    await i.update({ content: 'Operação cancelada', components: [] });
                     return;
                 }
-                await interaction.editReply({ content: 'Lista de servidores atualizada', components: [] });
+                await i.update({ content: 'Lista de servidores atualizada', components: [] });
                 client.emit('updateGuilds', true);
             })
 
             collector.on('end', async (_, reason) => {
                 if (reason === 'time') {
-                    await interaction.deleteReply();
                     await interaction.editReply({ content: 'Operação cancelada', components: [] });
                     return;
                 }
@@ -65,7 +62,7 @@ class UpdateserversCommand extends Command{
             return;
         }
 
-        client.emit('updateGuilds');
+        client.emit('updateGuilds', false);
         await interaction.editReply('Lista de servidores atualizada');
     }
 }

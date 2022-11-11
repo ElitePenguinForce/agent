@@ -165,7 +165,7 @@ class RegisterCommand extends Command{
             await member.roles.add(role);
         }
 
-        if (needUpdate) client.emit('updateGuilds')
+        if (needUpdate) client.emit('updateGuilds', false)
     }
 
     async autocomplete$server(interaction, value){

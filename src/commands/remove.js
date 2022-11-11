@@ -117,7 +117,7 @@ class RemoveCommand extends Command{
             }
         }
 
-        if (needUpdate) client.emit('updateGuilds')
+        if (needUpdate) client.emit('updateGuilds', false)
     }
 
     async autocomplete$server(interaction, value){

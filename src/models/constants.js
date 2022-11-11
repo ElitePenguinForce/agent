@@ -4,7 +4,7 @@ const config = require('../config');
 const constantsSchema = new Schema({
   _id: {
     type: String,
-    required: true
+    match: /^\d{17,19}&/
   },
   lastGuildsChannelUpdate: {
     type: Date,
@@ -25,7 +25,15 @@ constantsSchema.statics.getConstants = async function() {
 }
 
 constantsSchema.statics.updateConstants = async function(data) {
-  return await this.findByIdAndUpdate(config.agent, data, { new: true, upsert: true })
+  return await this.findByIdAndUpdate(
+    config.agent,
+    data,
+    {
+      new: true,
+      upsert: true,
+      setDefaultOnInsert: true
+    }
+  )
 }
 
 module.exports = model('constants', constantsSchema);
