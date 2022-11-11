@@ -4,7 +4,7 @@ const config = require('../config');
 const constantsSchema = new Schema({
   _id: {
     type: String,
-    match: /^\d{17,19}&/
+    match: /^\d{17,19}$/
   },
   lastGuildsChannelUpdate: {
     type: Date,
