@@ -122,9 +122,11 @@ class RegisterCommand extends Command{
         await interaction.reply(
             `${member} registrado em [${guildDoc.name}](https://discord.gg/${guildDoc.invite}) com sucesso`
         );
+        let needUpdate = false;
         const invite = await client.fetchInvite(guildDoc.invite).catch(() => null);
         if(invite){
             if(invite.guild){
+                if (guildDoc.name !== invite.guild.name) needUpdate = true
                 guildDoc.name = invite.guild.name;
                 await guildDoc.save();
             }
@@ -158,9 +160,12 @@ class RegisterCommand extends Command{
                     const otherMember = await interaction.guild.members.fetch(otherMemberDoc.user).catch(() => null);
                     if(otherMember) await otherMember.roles.add(role);
                 }
+                needUpdate = true;
             }
             await member.roles.add(role);
         }
+
+        if (needUpdate) client.emit('updateGuilds', false)
     }
 
     async autocomplete$server(interaction, value){

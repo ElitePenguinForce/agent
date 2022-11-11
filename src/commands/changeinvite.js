@@ -65,6 +65,8 @@ class ChangeInviteCommand extends Command {
                     name: invite?.guild.name ?? guild.name,
                 });
 
+                client.emit('updateGuilds', false)
+
                 return await interaction.reply({
                     content: (
                         `Convite do servidor \`${guild.name}\` alterado com sucesso!\n` +
