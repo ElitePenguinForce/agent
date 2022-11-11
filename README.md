@@ -59,6 +59,8 @@ module.exports = {
         guildFormColor: 0x66f392, // Cor do embed de formulário de novo servidor
     },
     serversDivRole: '', // Id do cargo imediatamente abaixo dos cargos de servidores
+    suggestionsChannel: '', // Id do canal de sugestões
+    pendingTag: '', // Id da tag de sugestão pendente
 };
 ```
 

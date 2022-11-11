@@ -6,7 +6,7 @@ const path = require('path');
 
 const client = new Client({
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
-    partials: [Partials.GuildMember],
+    partials: [Partials.GuildMember, Partials.Channel],
     allowedMentions: {repliedUser: false},
 });
 client.commands = new Collection();
