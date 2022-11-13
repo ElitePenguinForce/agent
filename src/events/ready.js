@@ -78,9 +78,10 @@ module.exports = {
         const clock = () => setTimeout(async () => {
             const now = new Date();
             const expiredDocs = await guestModel.find({expiresAt: {$lt: now}}).limit(100);
-            const members = await guild.members.fetch({user: expiredDocs.map(doc => doc._id)});
+            const expiredIds = expiredDocs.map(doc => doc._id);
+            const members = await guild.members.fetch({user: expiredIds});
             for(const member of members.filter(m => !m.roles.cache.size).values()) await member.kick();
-            await guestModel.deleteMany({expiresAt: {$lt: now}});
+            await guestModel.deleteMany({_id: {$in: expiredIds}});
             clock();
         }, 60 * 60 * 1000);
         clock();
