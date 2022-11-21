@@ -74,14 +74,15 @@ module.exports = {
             client.emit('updateGuilds', false);
         }
 
-        const guestModel = require('../models/guest.js');
         const clock = () => setTimeout(async () => {
-            const now = new Date();
-            const expiredDocs = await guestModel.find({expiresAt: {$lt: now}}).limit(100);
-            const expiredIds = expiredDocs.map(doc => doc._id);
-            const members = await guild.members.fetch({user: expiredIds});
-            for(const member of members.filter(m => (m.roles.cache.size === 1)).values()) await member.kick();
-            await guestModel.deleteMany({_id: {$in: expiredIds}});
+            const now = Date.now()
+            await guild.members.fetch();
+            for(
+                const member
+                of guild.members.cache
+                    .filter(m => ((m.roles.cache.size === 1) && (m.joinedTimestamp < (now - (24 * 60 * 60 * 1000)))))
+                    .values()
+            ) await member.kick();
             clock();
         }, 60 * 60 * 1000);
         clock();
