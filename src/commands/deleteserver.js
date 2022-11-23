@@ -88,6 +88,18 @@ class DeleteServerCommand extends Command {
                 content: "Deletando servidor...",
                 components: [],
             });
+            if (guild.role) {
+                await interaction.guild.roles
+                    .delete(guild.role)
+                    .catch(async (err) => {
+                        console.log(err);
+                        await interaction.followUp({
+                            content:
+                                "Não foi possível deletar o cargo do servidor",
+                            ephemeral: true,
+                        });
+                    });
+            }
             await guild.delete();
             await memberModel.deleteMany({ guild: guildId });
             await i.editReply({ content: "Servidor deletado" });
