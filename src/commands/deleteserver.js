@@ -91,6 +91,7 @@ class DeleteServerCommand extends Command {
             await guild.delete();
             await memberModel.deleteMany({ guild: guildId });
             await i.editReply({ content: "Servidor deletado" });
+            client.emit("updateGuilds", false);
         });
         collector.on("end", async (_, reason) => {
             if (reason === "time") {
