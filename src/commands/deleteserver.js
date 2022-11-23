@@ -18,7 +18,7 @@ class DeleteServerCommand extends Command {
                 .setDescription("Delete um servidor da database do agent.")
                 .setDMPermission(false)
                 .setDefaultMemberPermissions(
-                    PermissionsBitField.Flags.ManageGuild
+                    PermissionsBitField.Flags.ManageRoles
                 )
                 .addStringOption(
                     new SlashCommandStringOption()
