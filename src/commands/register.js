@@ -125,10 +125,11 @@ class RegisterCommand extends Command{
         let needUpdate = false;
         const invite = await client.fetchInvite(guildDoc.invite).catch(() => null);
         if(invite){
-            if(invite.guild){
-                if (guildDoc.name !== invite.guild.name) needUpdate = true
+            if(invite.guild && (guildDoc.name !== invite.guild.name)){
+                needUpdate = true;
                 guildDoc.name = invite.guild.name;
                 await guildDoc.save();
+                if(guildDoc.role) await interaction.guild.roles.cache.get(guildDoc.role).setName(invite.guild.name);
             }
         }
         else{
