@@ -42,8 +42,8 @@ class DeleteServerCommand extends Command {
         }
         const guildId = interaction.options.getString("server");
         const guildModel = require("../models/guild");
-        const guild = await guildModel.findById(guildId);
-        if (!guild) {
+    const guildDoc = await guildModel.findById(guildId);
+    if (!guildDoc) {
             return await interaction.reply({
                 content: "Servidor não cadastrado no banco de dados",
                 ephemeral: true,
@@ -88,9 +88,9 @@ class DeleteServerCommand extends Command {
                 content: "Deletando servidor...",
                 components: [],
             });
-            if (guild.role) {
+        if (guildDoc.role) {
                 await interaction.guild.roles
-                    .delete(guild.role)
+            .delete(guildDoc.role)
                     .catch(async (err) => {
                         console.log(err);
                         await interaction.followUp({
@@ -100,10 +100,14 @@ class DeleteServerCommand extends Command {
                         });
                     });
             }
-            await guild.delete();
+        await guildDoc.delete();
             await memberModel.deleteMany({ guild: guildId });
-            await i.editReply({ content: "Servidor deletado" });
-            client.emit("updateGuilds", false);
+        await i.editReply({ content: 'Servidor deletado' });
+        client.emit(
+           'updateGuilds',
+            false,
+        `<:icon_guild:1037801942149242926> **|** O servidor **${guildDoc.name}** saiu da EPF`
+        );
         });
         collector.on("end", async (_, reason) => {
             if (reason === "time") {

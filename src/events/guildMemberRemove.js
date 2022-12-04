@@ -29,7 +29,11 @@ module.exports = {
             if(memberCount <= config.membersForRole){
                 await client.guilds.cache.get(config.guild).roles.delete(memberDoc.guild.role);
                 await guildModel.updateOne({_id: memberDoc.guild._id}, {$set: {role: null}});
-                client.emit('updateGuilds', false);
+                client.emit(
+                    'updateGuilds',
+                    false,
+                    `<:mod:1040429385066491946> **|** O servidor **${guildDoc.name}** perdeu o seu cargo.`
+                );
             }
         }
         await memberModel.deleteMany({user: user.id});

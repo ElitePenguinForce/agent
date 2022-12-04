@@ -36,4 +36,5 @@ module.exports = {
     serversDivRole: '822191650381365289',
     suggestionsChannel: '1025927402800558090',
     pendingTag: '1040402827064922155',
+    guildsChangeLog: "1049034683968663612",
 };

@@ -49,7 +49,11 @@ module.exports = {
             await interaction.editReply("Servidor Aprovado");
         }
 
-        client.emit('updateGuilds', false)
+        client.emit(
+            'updateGuilds',
+            false,
+            `<:icon_guild:1037801942149242926> **|** Novo servidor aprovado: **${guildDoc.name}**`
+        );
 
         const webhook = parseWebhookURL(process.env.OFFTOPIC_WEBHOOK);
         await interaction.client.fetchWebhook(webhook.id, webhook.token)
@@ -58,7 +62,7 @@ module.exports = {
                     content: `<:icons_djoin:875754472834469948> O servidor **${guildDoc.name}** entrou para a EPF`,
                     username: interaction.guild.name,
                     avatarURL: interaction.guild.iconURL(),
-                })
-            })
-    }
-}
+                });
+            });
+    },
+};

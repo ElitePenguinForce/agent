@@ -75,12 +75,19 @@ class ChangeInviteCommand extends Command {
                     });
                 }
 
-                await guildModel.updateOne({_id: guildId}, {
-                    invite: invite.code,
-                    name: invite?.guild.name ?? guild.name,
-                });
+        const guildDoc = await guildModel.findOneAndUpdate(
+            { _id: guildId },
+            {
+                invite: invite.code,
+                name: invite?.guild.name ?? guild.name,
+            }
+        );
 
-                client.emit('updateGuilds', false)
+        client.emit(
+            'updateGuilds',
+            false,
+            `<:icon_guild:1037801942149242926> **|** Novo convite para o servidor **${guildDoc.name}** foi gerado`
+        );
 
                 return await interaction.reply({
                     content: (
