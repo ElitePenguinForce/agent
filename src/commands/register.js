@@ -133,10 +133,11 @@ class RegisterCommand extends Command{
 			);
 			guildDoc.name = invite.guild.name;
 			await guildDoc.save();
-			if (guildDoc.role)
-			await interaction.guild.roles.cache
-				.get(guildDoc.role)
-				.setName(invite.guild.name);
+			if (guildDoc.role) {
+				await interaction.guild.roles.cache
+					.get(guildDoc.role)
+					.setName(invite.guild.name);
+			}
     		}
 	} else {
             await interaction.followUp({
