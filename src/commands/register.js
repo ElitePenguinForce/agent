@@ -122,23 +122,23 @@ class RegisterCommand extends Command{
         await interaction.reply(
             `${member} registrado em [${guildDoc.name}](https://discord.gg/${guildDoc.invite}) com sucesso`
         );
-		let updates = [];
-		const invite = await client
-			.fetchInvite(guildDoc.invite)
-			.catch(() => null);
-		if (invite) {
-			if (invite.guild && guildDoc.name !== invite.guild.name) {
-				updates.push(
-					`<:icon_guild:1037801942149242926> **|** Nome de servidor alterado: **${guildDoc.name}** -> **${invite.guild.name}**`
-				);
-                guildDoc.name = invite.guild.name;
-                await guildDoc.save();
-				if (guildDoc.role)
-					await interaction.guild.roles.cache
-						.get(guildDoc.role)
-						.setName(invite.guild.name);
-            }
-		} else {
+	let updates = [];
+	const invite = await client
+		.fetchInvite(guildDoc.invite)
+		.catch(() => null);
+	if (invite) {
+		if (invite.guild && guildDoc.name !== invite.guild.name) {
+			updates.push(
+				`<:icon_guild:1037801942149242926> **|** Nome de servidor alterado: **${guildDoc.name}** -> **${invite.guild.name}**`
+			);
+			guildDoc.name = invite.guild.name;
+			await guildDoc.save();
+			if (guildDoc.role)
+			await interaction.guild.roles.cache
+				.get(guildDoc.role)
+				.setName(invite.guild.name);
+    		}
+	} else {
             await interaction.followUp({
                 content: (
                     `Por favor adicione um convite válido para o seu servidor utilizando ` +
@@ -167,17 +167,17 @@ class RegisterCommand extends Command{
                     const otherMember = await interaction.guild.members.fetch(otherMemberDoc.user).catch(() => null);
                     if(otherMember) await otherMember.roles.add(role);
                 }
-				updates.push(
-					`<:mod:1040429385066491946> **|** Cargo para o servidor **${guildDoc.name}** criado`
-				);
+		updates.push(
+			`<:mod:1040429385066491946> **|** Cargo para o servidor **${guildDoc.name}** criado`
+		);
             }
             await member.roles.add(role);
         }
 
-		if (updates.length) {
-			client.emit('updateGuilds', false, updates.join('\n'));
-			updates = [];
-		}
+	if (updates.length) {
+		client.emit('updateGuilds', false, updates.join('\n'));
+		updates = [];
+	}
     }
 
     async autocomplete$server(interaction, value){
