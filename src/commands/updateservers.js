@@ -48,12 +48,14 @@ class UpdateserversCommand extends Command{
                     await i.update({ content: 'Operação cancelada', components: [] });
                     return;
                 }
+                await i.update({ content: 'Lista de servidores atualizada', components: [] });
 				client.emit(
 					'updateGuilds',
 					true,
 					`<:e_repeat:1049017561175568404> **|** A lista de servidores foi atualizada pois o ${interaction.user} pediu!`
 				);
-
+            });
+            
             collector.on('end', async (_, reason) => {
                 if (reason === 'time') {
                     await interaction.editReply({ content: 'Operação cancelada', components: [] });
