@@ -88,11 +88,15 @@ class RemoveCommand extends Command{
         await interaction.reply(
             `${member} removido de [${guildDoc.name}](https://discord.gg/${guildDoc.invite}) com sucesso`
         );
-        let needUpdate = false;
-        const invite = await client.fetchInvite(guildDoc.invite).catch(() => null);
-        if(invite){
-            if(invite.guild){
-                if (guildDoc.name !== invite.guild.name) needUpdate = true
+		let updates = [];
+		const invite = await client
+			.fetchInvite(guildDoc.invite)
+			.catch(() => null);
+		if (invite) {
+			if (invite.guild && guildDoc.name !== invite.guild.name) {
+				updates.push(
+					`<:icon_guild:1037801942149242926> **|** Nome de servidor alterado: **${guildDoc.name}** -> **${invite.guild.name}**`
+				);
                 guildDoc.name = invite.guild.name;
                 await guildDoc.save();
             }
@@ -113,11 +117,16 @@ class RemoveCommand extends Command{
                 await interaction.guild.roles.delete(guildDoc.role);
                 guildDoc.role = null;
                 await guildDoc.save();
-                needUpdate = true;
+				updates.push(
+					`<:mod:1040429385066491946> **|** O servidor **${guildDoc.name}** perdeu o seu cargo.`
+				);
             }
         }
 
-        if (needUpdate) client.emit('updateGuilds', false)
+		if (updates.length) {
+			client.emit('updateGuilds', false, updates.join('\n'));
+			updates = [];
+		}
     }
 
     async autocomplete$server(interaction, value){

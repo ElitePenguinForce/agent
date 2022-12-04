@@ -16,24 +16,23 @@ const constantsSchema = new Schema({
   },
   scheduledUpdate: {
     type: Boolean,
-    default: false
-  }
+	},
+	updateLogs: {
+		type: [String],
+		default: () => [],
+	},
 });
 
 constantsSchema.statics.getConstants = async function() {
   return await this.findById(config.agent) || await this.create({ _id: config.agent })
 }
 
-constantsSchema.statics.updateConstants = async function(data) {
-  return await this.findByIdAndUpdate(
-    config.agent,
-    data,
-    {
+constantsSchema.statics.updateConstants = async function (data) {
+	return await this.updateOne({ _id: config.agent }, data, {
       new: true,
       upsert: true,
-      setDefaultOnInsert: true
-    }
-  )
-}
+		setDefaultOnInsert: true,
+	});
+};
 
 module.exports = model('constants', constantsSchema);

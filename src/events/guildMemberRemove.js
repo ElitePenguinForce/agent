@@ -23,13 +23,11 @@ module.exports = {
         const guildModel = require('../models/guild.js');
         await guildModel.updateMany({owner: user.id}, {$set: {owner: null}});
         const memberModel = require('../models/member.js');
-        const memberDocs = await memberModel.find({user: user.id}).populate('guild');
-        for(const memberDoc of memberDocs.filter(doc => doc.guild.role)){
-            const memberCount = await memberModel.countDocuments({guild: memberDoc.guild._id});
-            if(memberCount <= config.membersForRole){
-                await client.guilds.cache.get(config.guild).roles.delete(memberDoc.guild.role);
-                await guildModel.updateOne({_id: memberDoc.guild._id}, {$set: {role: null}});
-                client.emit('updateGuilds', false);
+				client.emit(
+					'updateGuilds',
+					false,
+					`<:mod:1040429385066491946> **|** O servidor **${guildDoc.name}** perdeu o seu cargo.`
+				);
             }
         }
         await memberModel.deleteMany({user: user.id});
