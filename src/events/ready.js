@@ -70,15 +70,15 @@ module.exports = {
         const constantsModel = require('../models/constants');
         const constants = await constantsModel.getConstants();
         if (constants.updatingGuildsChannel || constants.scheduledUpdate) {
-			await constantsModel.updateConstants({
-				updatingGuildsChannel: false,
-				scheduledUpdate: false,
-			});
-			client.emit(
-				'updateGuilds',
-				true,
-				'<:e_repeat:1049017561175568404> **|** A última atualização não foi bem sucedida, por isso será refeita'
-			);
+		await constantsModel.updateConstants({
+			updatingGuildsChannel: false,
+			scheduledUpdate: false,
+		});
+		client.emit(
+			'updateGuilds',
+			true,
+			'<:e_repeat:1049017561175568404> **|** A última atualização não foi bem sucedida, por isso será refeita'
+		);
         }
 
         const clock = () => setTimeout(async () => {
