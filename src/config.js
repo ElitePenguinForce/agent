@@ -33,5 +33,8 @@ module.exports = {
         developerFormColor: 0xE18002,
         guildFormColor: 0x66f392,
     },
-	guildsChangeLog: "1049034683968663612",
+    serversDivRole: '822191650381365289',
+    suggestionsChannel: '1025927402800558090',
+    pendingTag: '1040402827064922155',
+    guildsChangeLog: "1049034683968663612",
 };
