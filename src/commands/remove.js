@@ -90,7 +90,7 @@ class RemoveCommand extends Command{
                 admin: {
                     $ne: true
                 }
-            });
+            }).populate('guild');
             const isStillMod = modStaffs.some((doc) => doc.guild.pending !== true);
             if(!isStillMod) await member.roles.remove(config.levels[0]);
         }
