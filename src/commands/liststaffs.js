@@ -28,7 +28,7 @@ class ListstaffsCommand extends Command{
                 name: `Staffs que ${interaction.targetUser.tag} faz parte`,
                 iconURL: interaction.targetUser.avatarURL({dynamic: true}),
             });
-        const ownedGuilds = memberDocs.filter(doc => (doc.user === doc.guild.owner));
+        const ownedGuilds = memberDocs.filter(doc => (doc.user === doc.guild.owner && doc.guild.pending !== true));
         if(ownedGuilds.length) embed.addFields({
             name: 'Dono de',
             value: ownedGuilds
@@ -38,7 +38,7 @@ class ListstaffsCommand extends Command{
                 ))
                 .join('\n'),
         });
-        const adminGuilds = memberDocs.filter(doc => (doc.admin && (doc.user !== doc.guild.owner)));
+        const adminGuilds = memberDocs.filter(doc => (doc.admin && (doc.user !== doc.guild.owner) && doc.guild.pending !== true));
         if(adminGuilds.length) embed.addFields({
             name: 'Administra',
             value: adminGuilds
@@ -48,7 +48,7 @@ class ListstaffsCommand extends Command{
                 ))
                 .join('\n'),
         });
-        const modGuilds = memberDocs.filter(doc => !doc.admin);
+        const modGuilds = memberDocs.filter(doc => !doc.admin && doc.guild.pending !== true);
         if(modGuilds.length) embed.addFields({
             name: 'Modera',
             value: modGuilds

@@ -71,6 +71,10 @@ class RegisterCommand extends Command{
             content: 'Servidor não cadastrado no banco de dados',
             ephemeral: true,
         });
+        if (guildDoc.pending) return await interaction.reply({
+            content: 'O servidor ainda não foi aprovado na EPF',
+            ephemeral: true
+        });
         if((guildDoc.representative !== interaction.user.id) && !interaction.member.roles.cache.has(config.guard)){
             return await interaction.reply({
                 content: 'Apenas o representante desse servidor pode adicionar novos membros a staff',

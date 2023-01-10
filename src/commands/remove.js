@@ -68,22 +68,31 @@ class RemoveCommand extends Command{
         if(guildDoc.owner === member.id){
             guildDoc.owner = null;
             await guildDoc.save();
-            const ownedGuildExists = await guildModel.exists({owner: member.id});
+            const ownedGuildExists = await guildModel.exists({
+                owner: member.id,
+                pending: {
+                    $ne: true
+                }
+            });
             if(!ownedGuildExists) await member.roles.remove(config.levels[2]);
         }
         else if(memberDoc.admin){
-            const adminGuildExists = await memberModel.exists({
+            const adminStaffs = await memberModel.find({
                 user: member.id,
-                admin: true,
-            });
-            if(!adminGuildExists) await member.roles.remove(config.levels[1]);
+                admin: true
+            }).populate('guild');
+            const isStillAdmin = adminStaffs.some((doc) => doc.guild.pending !== true);
+            if(!isStillAdmin) await member.roles.remove(config.levels[1]);
         }
         else{
-            const modGuildExists = await memberModel.exists({
+            const modStaffs = await memberModel.find({
                 user: member.id,
-                admin: {$ne: true},
+                admin: {
+                    $ne: true
+                }
             });
-            if(!modGuildExists) await member.roles.remove(config.levels[0]);
+            const isStillMod = modStaffs.some((doc) => doc.guild.pending !== true);
+            if(!isStillMod) await member.roles.remove(config.levels[0]);
         }
         await interaction.reply(
             `${member} removido de [${guildDoc.name}](https://discord.gg/${guildDoc.invite}) com sucesso`
