@@ -12,6 +12,8 @@ module.exports = {
         if (member) await member.roles.add(config.devID);
         else return interaction[interaction.replied || interaction.deferred ? 'followUp' : 'reply']({ content: "Membro não encontrado... Não consegui dar o cargo à ele", ephemeral: true });
 
+        await interaction.deferReply({ ephemeral: true });
+
         const embed = EmbedBuilder.from(interaction.message.embeds[0]);
 
         const message = await member.send({ content: `Parabéns, você foi aprovado e está apto para receber o cargo de Developer no EPF!` }).catch(() => null);
@@ -22,7 +24,7 @@ module.exports = {
 
         await interaction.message.thread.setArchived(true);
 
-        await interaction[interaction.replied || interaction.deferred ? 'followUp' : 'reply']({ content: "Desenvolvedor Aprovado", ephemeral: true });
+        await interaction.editReply({ content: "Desenvolvedor Aprovado", ephemeral: true });
     
         const webhook = parseWebhookURL(process.env.OFFTOPIC_WEBHOOK);
         await interaction.client.fetchWebhook(webhook.id, webhook.token)
