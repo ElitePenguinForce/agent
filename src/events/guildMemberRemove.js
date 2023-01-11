@@ -32,7 +32,7 @@ module.exports = {
                 client.emit(
                     'updateGuilds',
                     false,
-                    `<:mod:1040429385066491946> **|** O servidor **${guildDoc.name}** perdeu o seu cargo.`
+                    `<:mod:1040429385066491946> **|** O servidor **${memberDoc.guild.name}** perdeu o seu cargo.`
                 );
             }
         }
