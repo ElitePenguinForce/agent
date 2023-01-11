@@ -49,17 +49,22 @@ class ChangeInviteCommand extends Command {
         const guildModel = require('../models/guild.js');
         const guildId = interaction.options.getString('server');
         require('../models/member.js');
-        const guild = await guildModel.findById(guildId);
+        const guildDoc = await guildModel.findById(guildId);
 
-        if (!guild) 
+        if (!guildDoc) 
             return interaction.reply({
                 content: 'Servidor não encontrado ou removido... ID não está cadastrado no sistema',
                 ephemeral: true,
-            })
+            });
+
+        if (guildDoc.pending) return await interaction.reply({
+            content: 'O servidor ainda não foi aprovado na EPF',
+            ephemeral: true
+        });
         
         //Uma verificação simples para ver se o usuário é representante da equipe, isto serve para quando
         //o comando falhar no passado e o usuário tentar chamá-lo novamente não sendo o representante no presente
-        if ((guild.representative !== interaction.user.id) && !interaction.member.roles.cache.has(config.guard)) 
+        if ((guildDoc.representative !== interaction.user.id) && !interaction.member.roles.cache.has(config.guard)) 
             return await interaction.reply({
                 content: 'Você não é o representante dessa equipe.',
                 ephemeral: true,
@@ -75,23 +80,25 @@ class ChangeInviteCommand extends Command {
                     });
                 }
 
-        const guildDoc = await guildModel.findOneAndUpdate(
-            { _id: guildId },
-            {
-                invite: invite.code,
-                name: invite?.guild.name ?? guild.name,
-            }
-        );
+                const guildDoc = await guildModel.findOneAndUpdate(
+                    { 
+                        _id: guildId
+                    },
+                    {
+                        invite: invite.code,
+                        name: invite?.guild.name ?? guildDoc.name,
+                    }
+                );
 
-        client.emit(
-            'updateGuilds',
-            false,
-            `<:icon_guild:1037801942149242926> **|** Novo convite para o servidor **${guildDoc.name}** foi gerado`
-        );
+                client.emit(
+                    'updateGuilds',
+                    false,
+                    `<:icon_guild:1037801942149242926> **|** Novo convite para o servidor **${guildDoc.name}** foi gerado`
+                );
 
                 return await interaction.reply({
                     content: (
-                        `Convite do servidor \`${guild.name}\` alterado com sucesso!\n` +
+                        `Convite do servidor \`${guildDoc.name}\` alterado com sucesso!\n` +
                         `Novo convite: ${invite.url}`
                     ),
                 });

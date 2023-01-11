@@ -49,11 +49,11 @@ class UpdateserversCommand extends Command{
                     return;
                 }
                 await i.update({ content: 'Lista de servidores atualizada', components: [] });
-        client.emit(
-            'updateGuilds',
-            true,
-            `<:e_repeat:1049017561175568404> **|** A lista de servidores foi atualizada pois o ${interaction.user} pediu!`
-        );
+                client.emit(
+                    'updateGuilds',
+                    true,
+                    `<:e_repeat:1049017561175568404> **|** A lista de servidores foi atualizada pois o ${interaction.user} pediu!`
+                );
             });
             
             collector.on('end', async (_, reason) => {
@@ -66,11 +66,11 @@ class UpdateserversCommand extends Command{
             return;
         }
 
-    client.emit(
-        'updateGuilds',
-        false,
-        `<:e_repeat:1049017561175568404> **|** A lista de servidores foi atualizada pois o ${interaction.user} pediu!`
-    );
+        client.emit(
+            'updateGuilds',
+            false,
+            `<:e_repeat:1049017561175568404> **|** A lista de servidores foi atualizada pois o ${interaction.user} pediu!`
+        );
         await interaction.editReply('Lista de servidores atualizada');
     }
 }
