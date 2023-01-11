@@ -5,6 +5,8 @@ module.exports = {
         name: 'serverRefuseReasonModal'
     },
     async execute(interaction, client) {
+        await interaction.deferReply({ ephemeral: true });
+
         const embed = EmbedBuilder.from(interaction.message.embeds[0]);
 
         const reasonInput = interaction.fields.getTextInputValue("reason");
@@ -36,7 +38,7 @@ module.exports = {
                 });
         }
 
-        await interaction[interaction.replied || interaction.deferred ? 'followUp' : 'reply']({
+        await interaction.editReply({
             content: "Servidor Recusado",
             ephemeral: true,
         });
