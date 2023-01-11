@@ -57,13 +57,17 @@ class RemoveCommand extends Command{
         }
         else if(!interaction.member.roles.cache.has(config.guard)){
             return await interaction.reply({
-                content: 'Apenas o representante desse servidor pode adicionar novos membros a staff',
+                content: 'Apenas o representante desse servidor pode remover membros da staff',
                 ephemeral: true,
             });
         }
         const memberDoc = await memberModel.findOneAndDelete({
             user: member.id,
             guild: guildId,
+        });
+        if (!memberDoc) return await interaction.reply({
+            content: 'Esse membro não pertence a staff desse servidor',
+            ephemeral: true
         });
         if(guildDoc.owner === member.id){
             guildDoc.owner = null;
