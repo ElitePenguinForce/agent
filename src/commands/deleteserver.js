@@ -63,7 +63,7 @@ class DeleteServerCommand extends Command {
         );
         const reply = await interaction.reply({
             content:
-                `Tem certeza de que deseja deletar o servidor **${guild.name}** do bando de dados?` +
+                `Tem certeza de que deseja deletar o servidor **${guildDoc.name}** do bando de dados?` +
                 `${
                     membersCount === 0
                         ? ""
