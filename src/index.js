@@ -20,8 +20,8 @@ const fs = require('fs');
 const path = require('path');
 
 const client = new Client({
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
-    partials: [Partials.GuildMember, Partials.Channel],
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.MessageContent],
+    partials: [Partials.GuildMember, Partials.Channel, Partials.Message],
     allowedMentions: {repliedUser: false},
 });
 client.commands = new Collection();
