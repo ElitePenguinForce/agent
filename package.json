@@ -11,6 +11,7 @@
   "author": "ElitePenguinForce",
   "license": "GPL-3.0",
   "dependencies": {
+    "@codernocook/youchatwrapper": "^1.1.6",
     "@discordjs/rest": "^1.0.1",
     "chalk": "^4.1.2",
     "discord-api-types": "^0.37.1",
