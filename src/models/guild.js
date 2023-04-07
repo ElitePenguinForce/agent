@@ -17,7 +17,7 @@ const guildSchema = new Schema({
     },
     invite: {
         type: String,
-        match: /^\w+$/,
+        match: /^[\w\-]+$/,
         required: true,
     },
     name: {
