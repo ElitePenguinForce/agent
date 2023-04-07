@@ -100,6 +100,37 @@ class DeleteServerCommand extends Command {
                         });
                     });
             }
+            const memberDocs = await memberModel.find({guild: guildId});
+            for(const memberDoc of memberDocs){
+                const member = await interaction.guild.members.fetch(memberDoc._id);
+                if(guildDoc.owner === member.id){
+                    const ownedGuildExists = await guildModel.exists({
+                        owner: member.id,
+                        pending: {
+                            $ne: true
+                        }
+                    });
+                    if(!ownedGuildExists) await member.roles.remove(config.levels[2]);
+                }
+                else if(memberDoc.admin){
+                    const adminStaffs = await memberModel.find({
+                        user: member.id,
+                        admin: true
+                    }).populate('guild');
+                    const isStillAdmin = adminStaffs.some((doc) => doc.guild.pending !== true);
+                    if(!isStillAdmin) await member.roles.remove(config.levels[1]);
+                }
+                else{
+                    const modStaffs = await memberModel.find({
+                        user: member.id,
+                        admin: {
+                            $ne: true
+                        }
+                    }).populate('guild');
+                    const isStillMod = modStaffs.some((doc) => doc.guild.pending !== true);
+                    if(!isStillMod) await member.roles.remove(config.levels[0]);
+                }
+            }
             await guildDoc.delete();
             await memberModel.deleteMany({ guild: guildId });
             await i.editReply({ content: 'Servidor deletado' });
