@@ -89,6 +89,12 @@ class ChangeInviteCommand extends Command {
                         name: invite?.guild.name ?? guildDoc.name,
                     }
                 );
+                
+                if (guildDoc.role) {
+                    await interaction.guild.roles.cache
+                        .get(guildDoc.role)
+                        .setName(invite.guild.name);
+                }
 
                 client.emit(
                     'updateGuilds',
