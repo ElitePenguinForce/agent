@@ -26,10 +26,10 @@ module.exports = {
         await guild.members.fetch();
         await guild.commands.fetch();
 
-        const formChannel = guild.channels.cache.get(config.formChannel);
-        const message = (await formChannel?.messages?.fetch({ limit: 1 }).catch(() => null))?.first();
+        const serverFormChannel = guild.channels.cache.get(config.serverFormChannel);
+        const serverFormMessage = (await serverFormChannel?.messages?.fetch({ limit: 1 }).catch(() => null))?.first();
         
-        if (!message || message.author.id !== client.user.id) {
+        if (!serverFormMessage || serverFormMessage.author.id !== client.user.id) {
             const registerServerEmbed = new EmbedBuilder()
                 .setTitle(`${config.formChannelData.guildFormEmoji} **|** Aplicar Servidor`)
                 .setImage(config.formChannelData.guildFormBanner)
@@ -38,7 +38,23 @@ module.exports = {
                     `<:green_dot:1037803471077908553> **|** Se você representa um servidor que cumpre os requisitos listados acima e acha que ele merece fazer parte da **Elite Penguin Force**, clique no botão abaixo e preencha o formulário para enviá-lo para uma avaliação.\n\n`+
                     `<:icon_idle_green:1037806417438068766> **| Lembrando:** Você será avisado assim que a avaliação tenha terminado. Por isso lembre de deixar suas "Mensagens Diretas" abertas.`
                 )
-                
+
+            const row = new ActionRowBuilder()
+                .setComponents(
+                    new ButtonBuilder()
+                        .setCustomId("register-server-form")
+                        .setLabel("Formulário de Servidor")
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji(config.formChannelData.guildFormEmoji),
+                );
+
+            serverFormChannel.send({ embeds: [registerServerEmbed], components: [row] });
+        }
+
+        const devFormChannel = guild.channels.cache.get(config.devFormChannel);
+        const devFormMessage = (await devFormChannel?.messages?.fetch({ limit: 1 }).catch(() => null))?.first();
+        
+        if (!devFormMessage || devFormMessage.author.id !== client.user.id) {
             const requestDevRoleEmbed = new EmbedBuilder()
                 .setTitle(`${config.formChannelData.developerFormEmoji} **|** Aplicar para Desenvolvedor`)
                 .setImage(config.formChannelData.developerFormBanner)
@@ -51,18 +67,13 @@ module.exports = {
             const row = new ActionRowBuilder()
                 .setComponents(
                     new ButtonBuilder()
-                        .setCustomId("register-server-form")
-                        .setLabel("Formulário de Servidor")
-                        .setStyle(ButtonStyle.Secondary)
-                        .setEmoji(config.formChannelData.guildFormEmoji),
-                    new ButtonBuilder()
                         .setCustomId("request-dev-role-form")
                         .setLabel("Formulário de Desenvolvedor")
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji(config.formChannelData.developerFormEmoji),
                 );
 
-            formChannel.send({ embeds: [registerServerEmbed, requestDevRoleEmbed], components: [row] });
+            devFormChannel.send({ embeds: [requestDevRoleEmbed], components: [row] });
         }
 
         // se crashar ou reiniciar no meio de uma atualização, ele vai refazer essa atualização já
