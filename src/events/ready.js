@@ -30,8 +30,21 @@ module.exports = {
         const serverFormMessage = (await serverFormChannel?.messages?.fetch({ limit: 1 }).catch(() => null))?.first();
         
         if (!serverFormMessage || serverFormMessage.author.id !== client.user.id) {
+            const serverRequirementsEmbed = new EmbedBuilder()
+                .setTitle('<:icons_info:880113401207095346> Requisitos:')
+                .setImage(
+                    'https://cdn.discordapp.com/attachments/1034845518452502658/1034845554796150815/Requisitos.png',
+                )
+                .setColor(config.formChannelData.guildFormColor)
+                .setDescription(
+                    '<:icons_globe:859424401971609600> Para adicionar algum servidor a EPF é necessário que tenha no' +
+                    ' mínimo **5.000 membros** ou que sejam **verificados** ou **parceiros** do Discord e atenda a' +
+                    ' todos os  [termos de serviço](https://discord.com/terms) e as' +
+                    ' [diretrizes](https://discord.com/guidelines) do Discord.',
+                )
+
             const registerServerEmbed = new EmbedBuilder()
-                .setTitle(`${config.formChannelData.guildFormEmoji} **|** Aplicar Servidor`)
+                .setTitle(`${config.formChannelData.guildFormEmoji} Aplicar Servidor`)
                 .setImage(config.formChannelData.guildFormBanner)
                 .setColor(config.formChannelData.guildFormColor)
                 .setDescription(
@@ -48,15 +61,31 @@ module.exports = {
                         .setEmoji(config.formChannelData.guildFormEmoji),
                 );
 
-            serverFormChannel.send({ embeds: [registerServerEmbed], components: [row] });
+            serverFormChannel.send({ embeds: [serverRequirementsEmbed, registerServerEmbed], components: [row] });
         }
 
         const devFormChannel = guild.channels.cache.get(config.devFormChannel);
         const devFormMessage = (await devFormChannel?.messages?.fetch({ limit: 1 }).catch(() => null))?.first();
         
         if (!devFormMessage || devFormMessage.author.id !== client.user.id) {
+            const devRequirementsEmbed = new EmbedBuilder()
+                .setTitle('<:icons_info:880113401207095346> Requisitos:')
+                .setImage(
+                    'https://cdn.discordapp.com/attachments/1034845518452502658/1034845554796150815/Requisitos.png',
+                )
+                .setColor(config.formChannelData.developerFormColor)
+                .setDescription(
+                    '<:icons_monitor:866583417138839563> Para receber o cargo <@&822202388780941313>, é necessário' +
+                    ' que cumpra com algum dos seguintes requisitos:\n' +
+                    '<:point_epf:1035646113279123468> Possuir um bot verificado (online);\n' +
+                    '<:point_epf:1035646113279123468> Ter um bot privado de algum dos servidores associados à EPF;\n' +
+                    '<:point_epf:1035646113279123468> Trabalhar com desenvolvimento de software;\n' +
+                    '<:point_epf:1035646113279123468> Ter contribuições/projetos documentados no' +
+                    ' [GitHub](https://github.com/).',
+                )
+
             const requestDevRoleEmbed = new EmbedBuilder()
-                .setTitle(`${config.formChannelData.developerFormEmoji} **|** Aplicar para Desenvolvedor`)
+                .setTitle(`${config.formChannelData.developerFormEmoji} Aplicar para Desenvolvedor`)
                 .setImage(config.formChannelData.developerFormBanner)
                 .setColor(config.formChannelData.developerFormColor)
                 .setDescription(
@@ -73,7 +102,7 @@ module.exports = {
                         .setEmoji(config.formChannelData.developerFormEmoji),
                 );
 
-            devFormChannel.send({ embeds: [requestDevRoleEmbed], components: [row] });
+            devFormChannel.send({ embeds: [devRequirementsEmbed, requestDevRoleEmbed], components: [row] });
         }
 
         // se crashar ou reiniciar no meio de uma atualização, ele vai refazer essa atualização já
