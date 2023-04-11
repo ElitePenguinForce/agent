@@ -31,7 +31,7 @@ module.exports = {
         
         if (!serverFormMessage || serverFormMessage.author.id !== client.user.id) {
             const serverRequirementsEmbed = new EmbedBuilder()
-                .setTitle('<:info:1095440963620573394> Requisitos:')
+                .setTitle('<:info:1095440963620573394> Requisitos')
                 .setImage(
                     'https://cdn.discordapp.com/attachments/1034845518452502658/1034845554796150815/Requisitos.png',
                 )
@@ -69,7 +69,7 @@ module.exports = {
         
         if (!devFormMessage || devFormMessage.author.id !== client.user.id) {
             const devRequirementsEmbed = new EmbedBuilder()
-                .setTitle('<:info:1095440963620573394> Requisitos:')
+                .setTitle('<:info:1095440963620573394> Requisitos')
                 .setImage(
                     'https://cdn.discordapp.com/attachments/1034845518452502658/1034845554796150815/Requisitos.png',
                 )
