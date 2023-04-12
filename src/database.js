@@ -2,7 +2,11 @@ const mongoose = require("mongoose");
 const app = mongoose.connection;
 
 const connect = async () => {
-    return await mongoose.connect(`${process.env.MONGOURL}?retryWrites=true&w=majority`, {useNewUrlParser: true});
+    return (
+        await mongoose
+            .connect(`${process.env.MONGOURL}?retryWrites=true&w=majority`, {useNewUrlParser: true})
+            .catch(console.error)
+    );
 }
 
 app.on("error", async err => {
