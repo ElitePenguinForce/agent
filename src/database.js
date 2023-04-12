@@ -5,11 +5,11 @@ const connect = async () => {
     return await mongoose.connect(`${process.env.MONGOURL}?retryWrites=true&w=majority`, {useNewUrlParser: true});
 }
 
-app.on("error", err => {
+app.on("error", async err => {
     console.error(err);
-    process.exit();
+    await mongoose.disconnect();
 });
 
-app.on("disconnected", async () => await connect());
+app.on("disconnected", () => process.exit());
 
 (async () => await connect())();
