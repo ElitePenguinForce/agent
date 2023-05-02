@@ -51,12 +51,12 @@ class StaffCommand extends Command{
             .setDescription(guildDoc.role ? `${description}\nCargo: <@&${guildDoc.role}>` : description);
         const adminDocs = memberDocs.filter(doc => doc.admin);
         if(adminDocs.length) embed.addFields({
-            name: 'Administradores',
+            name: `Administradores (${adminDocs.length})`,
             value: adminDocs.map(doc => `<@${doc.user}>`).join('\n'),
         });
         const modDocs = memberDocs.filter(doc => !doc.admin);
         if(modDocs.length) embed.addFields({
-            name: 'Moderadores',
+            name: `Moderadores (${modDocs.length})`,
             value: modDocs.map(doc => `<@${doc.user}>`).join('\n'),
         });
         await interaction.reply({
