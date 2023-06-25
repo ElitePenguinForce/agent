@@ -29,7 +29,7 @@ module.exports = {
             .setTitle(`Novo formulário - Desenvolvedor`)
             .setColor('#e3ba03')
             .setFields([
-                { name: "Enviado por", value: `${interaction.user.tag} (${interaction.user.id})`, inline: true },
+                { name: "Enviado por", value: `${interaction.user.username} (${interaction.user.id})`, inline: true },
                 { name: "GitHub", value: `${interaction.fields.getTextInputValue("githubLink")}`, inline: true },
                 { name: "Atuação", value: `${interaction.fields.getTextInputValue("experienceInfo")}`, inline: true },
                 { name: "Exemplo", value: `${interaction.fields.getTextInputValue("example")}`, inline: true },
@@ -53,7 +53,7 @@ module.exports = {
             embeds: [embed], components: [row]
         });
 
-        await message.startThread({ name: `Dev ${interaction.user.tag}` });
+        await message.startThread({ name: `Dev ${interaction.user.username}` });
 
         await interaction.reply({
             content: 'Seu pedido foi enviado para avaliação.',

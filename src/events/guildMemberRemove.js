@@ -43,7 +43,7 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setColor(0x2f3136)
                 .setDescription(
-                    `${user} \`${user.tag}\` saiu do servidor enquanto representava os servidores: ` +
+                    `${user} \`${user.username}\` saiu do servidor enquanto representava os servidores: ` +
                     representingDocs.map(doc => `[\`${doc.name}\`](https://discord.gg/${doc.invite})`).join(' ')
                 );
             await client.channels.cache.get(config.logs).send({embeds: [embed]});
