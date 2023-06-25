@@ -21,7 +21,7 @@ module.exports = {
     once: true,
 
     async execute(client) {
-        console.log (`Logado em ${client.user.tag} (${client.user.id})`);
+        console.log(`Logado em ${client.user.username} (${client.user.id})`);
         const guild = client.guilds.cache.get(config.guild);
         await guild.members.fetch();
         await guild.commands.fetch();

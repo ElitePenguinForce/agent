@@ -25,7 +25,7 @@ class ListstaffsCommand extends Command{
         const embed = new EmbedBuilder()
             .setColor(0x2f3136)
             .setAuthor({
-                name: `Staffs que ${interaction.targetUser.tag} faz parte`,
+                name: `Staffs que ${interaction.targetUser.username} faz parte`,
                 iconURL: interaction.targetUser.avatarURL({dynamic: true}),
             });
         const ownedGuilds = memberDocs.filter(doc => (doc.user === doc.guild.owner && doc.guild.pending !== true));

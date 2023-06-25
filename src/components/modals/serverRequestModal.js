@@ -60,7 +60,7 @@ module.exports = {
                 .setTitle("Formulário Recusado")
                 .setColor("#d12c2c")
                 .setFields([
-                    { name: "Enviado por", value: `${interaction.user.tag} (${interaction.user.id})`, inline: true },
+                    { name: "Enviado por", value: `${interaction.user.username} (${interaction.user.id})`, inline: true },
                     { name: "Link permanente do servidor", value: `${fetchedInvite?.url || "Inválido"}`, inline: true },
                     { name: "Cargo Principal no Servidor", value: `${parsedRole || "Inválido"}`, inline: true },
                     { name: "Sobre o servidor", value: `${serverAbout}`, inline: false },
@@ -78,7 +78,7 @@ module.exports = {
             .setTitle(`Novo formulário`)
             .setColor('#fccf03')
             .setFields([
-                { name: "Enviado por", value: `${interaction.user.tag} (${interaction.user.id})`, inline: true },
+                { name: "Enviado por", value: `${interaction.user.username} (${interaction.user.id})`, inline: true },
                 { name: "Link permanente do servidor", value: `${fetchedInvite?.url || "Inválido"}`, inline: true },
                 { name: "Cargo Principal no Servidor", value: `${parsedRole || "Inválido"}`, inline: true },
                 { name: "Sobre o servidor", value: `${serverAbout}`, inline: false },
