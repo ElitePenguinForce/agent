@@ -102,7 +102,7 @@ class DeleteServerCommand extends Command {
             }
             const memberDocs = await memberModel.find({guild: guildId});
             for(const memberDoc of memberDocs){
-                const member = await interaction.guild.members.fetch(memberDoc._id);
+                const member = await interaction.guild.members.fetch(memberDoc.user).catch(() => null);
                 if(!member) continue;
                 if(guildDoc.owner === member.id){
                     const ownedGuildExists = await guildModel.exists({
