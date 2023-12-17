@@ -121,13 +121,23 @@ module.exports = {
             );
         }
 
+        const guildModel = require('../models/guild.js');
         const clock = () => setTimeout(async () => {
             const now = Date.now()
             await guild.members.fetch();
+            const pendingGuilds = await guildModel.find({pending: true});
             for(
                 const member
                 of guild.members.cache
-                    .filter(m => ((m.roles.cache.size === 1) && (m.joinedTimestamp < (now - (24 * 60 * 60 * 1000)))))
+                    .filter(m => (
+                        !m.user.bot
+                        &&
+                        (m.roles.highest.position < guild.roles.cache.get(config.serversDivRole).position)
+                        &&
+                        (m.joinedTimestamp < (now - (24 * 60 * 60 * 1000)))
+                        &&
+                        !pendingGuilds.some(g => (g.representative === m.id))
+                    ))
                     .values()
             ) await member.kick();
             clock();

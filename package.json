@@ -1,6 +1,6 @@
 {
   "name": "agent",
-  "version": "1.13.21",
+  "version": "1.13.24",
   "description": "",
   "main": "./src/index.js",
   "scripts": {
