@@ -37,6 +37,6 @@ module.exports = async (client) => {
             );
         await channel.send({embeds: [embed]});
     }
-    await channel.setTopic(`<:icons_discover:859429432535023666>  | **${guildCount} servidores associados.**`);
+    await channel.setTopic(`🧭 | **${guildCount} servidores associados.**`);
     await constantsModel.updateConstants({ updatingGuildsChannel: false });
 }
