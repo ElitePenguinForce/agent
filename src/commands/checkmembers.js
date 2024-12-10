@@ -5,6 +5,7 @@ const config = require("../config.js");
 class CheckMembersCommand extends Command {
   constructor() {
     super({
+        active: true,
       data: new SlashCommandBuilder()
         .setName("checkmembers")
         .setDescription("Faça um checkup de todos os membros do servidor.")
