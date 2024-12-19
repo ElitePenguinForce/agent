@@ -106,6 +106,7 @@ class DeleteServerCommand extends Command {
                 if(!member) continue;
                 if(guildDoc.owner === member.id){
                     const ownedGuildExists = await guildModel.exists({
+                        _id: {$ne: guildId},
                         owner: member.id,
                         pending: {
                             $ne: true
@@ -116,7 +117,10 @@ class DeleteServerCommand extends Command {
                 else if(memberDoc.admin){
                     const adminStaffs = await memberModel.find({
                         user: member.id,
-                        admin: true
+                        admin: true,
+                        guild: {
+                            $ne: guildId
+                        }
                     }).populate('guild');
                     const isStillAdmin = adminStaffs.some((doc) => doc.guild.pending !== true);
                     if(!isStillAdmin) await member.roles.remove(config.levels[1]);
@@ -126,6 +130,9 @@ class DeleteServerCommand extends Command {
                         user: member.id,
                         admin: {
                             $ne: true
+                        },
+                        guild: {
+                            $ne: guildId
                         }
                     }).populate('guild');
                     const isStillMod = modStaffs.some((doc) => doc.guild.pending !== true);
