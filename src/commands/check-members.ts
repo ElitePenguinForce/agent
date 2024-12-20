@@ -1,6 +1,8 @@
-import Member from "../db/models/member.js";
 import config from "../config.js";
+import Member from "../db/models/member.js";
 import createCommand from "../factories/command.js";
+import { ChunkedString } from "../utils/ChunkedString.js";
+import { MAX_MESSAGE_CONTENT_LENGTH } from "../utils/constants.js";
 
 export default createCommand({
   data: {
@@ -17,7 +19,7 @@ export default createCommand({
       limit: 1000,
     });
 
-    const warnings: string[] = [];
+    const warnings = new ChunkedString(MAX_MESSAGE_CONTENT_LENGTH);
 
     for (const member of members.values()) {
       const serverRoles = [
@@ -29,20 +31,23 @@ export default createCommand({
       if (member.roles.cache.hasAny(...serverRoles)) {
         const userDocs = memberDocs.filter((doc) => doc.user === member.id);
         if (!userDocs.length) {
-          warnings.push(
+          warnings.addLine(
             `**<@${member.id}> (${member.id})** have a moderator/admin/owner role but is not in any server!`,
           );
         }
       }
 
       if (member.roles.cache.has(config.ids.roles.guest)) {
-        warnings.push(`**<@${member.id}> (${member.id})** is a guest!`);
+        warnings.addLine(`**<@${member.id}> (${member.id})** is a guest!`);
       }
     }
 
-    // i'm praying that this content doesn't reach the discord limit
-    return interaction.editReply({
-      content: warnings.join("\n") || "Nenhum membro com problemas encontrado!",
-    });
+    for (const [index, warning] of warnings.get().entries()) {
+      const reply = index === 0 ? interaction.editReply : interaction.followUp;
+
+      await reply({
+        content: warning || "Nenhum membro com problemas encontrado!",
+      });
+    }
   },
 });
