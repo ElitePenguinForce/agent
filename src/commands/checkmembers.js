@@ -34,7 +34,7 @@ class CheckMembersCommand extends Command {
         const userDocs = memberDocs.filter((doc) => doc.user === id);
         if (!userDocs.length) {
           const warning = `**<@${id}> (${id})** have a moderator/admin/owner role but is not in any server!`;
-          if (warnings.at(-1).length + warning.length >= constants.maxMessageContentLength) {
+          if (warnings.at(-1).length + warning.length < constants.maxMessageContentLength) {
             warnings[warnings.length - 1] += `\n${warning}`;
           } else {
             warnings.push(warning);
@@ -44,7 +44,7 @@ class CheckMembersCommand extends Command {
 
       if (member.roles.cache.has(config.guestRole)) {
         const warning = `**<@${id}> (${id})** is a guest!`;
-        if (warnings.at(-1).length + warning.length >= constants.maxMessageContentLength) {
+        if (warnings.at(-1).length + warning.length < constants.maxMessageContentLength) {
           warnings[warnings.length - 1] += `\n${warning}`;
         } else {
           warnings.push(warning);
