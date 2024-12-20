@@ -1,11 +1,12 @@
 const { SlashCommandBuilder, PermissionsBitField } = require("discord.js");
 const Command = require("../structures/command.js");
 const config = require("../config.js");
+const constants = require("../utils/constants.js");
 
 class CheckMembersCommand extends Command {
   constructor() {
     super({
-        active: true,
+      active: true,
       data: new SlashCommandBuilder()
         .setName("checkmembers")
         .setDescription("Faça um checkup de todos os membros do servidor.")
@@ -32,23 +33,32 @@ class CheckMembersCommand extends Command {
       if (member.roles.cache.hasAny(...config.levels)) {
         const userDocs = memberDocs.filter((doc) => doc.user === id);
         if (!userDocs.length) {
-          warnings.push(
-            `**<@${id}> (${id})** have a moderator/admin/owner role but is not in any server!`,
-          );
+          const warning = `**<@${id}> (${id})** have a moderator/admin/owner role but is not in any server!`;
+          if (warnings.at(-1).length + warning.length >= constants.maxMessageContentLength) {
+            warnings[warnings.length - 1] += `\n${warning}`;
+          } else {
+            warnings.push(warning);
+          }
         }
       }
 
       if (member.roles.cache.has(config.guestRole)) {
-        warnings.push(
-          `**<@${id}> (${id})** is a guest!`,
-        );
+        const warning = `**<@${id}> (${id})** is a guest!`;
+        if (warnings.at(-1).length + warning.length >= constants.maxMessageContentLength) {
+          warnings[warnings.length - 1] += `\n${warning}`;
+        } else {
+          warnings.push(warning);
+        }
       }
     }
 
-    // i'm praying that this content doesn't reach the discord limit
-    await interaction.editReply({
-      content: warnings.join("\n"),
-    });
+    for (const [index, warning] of warnings.entries()) {
+      const reply = index === 0 ? interaction.editReply : interaction.followUp;
+      
+      await reply({
+        content: warning,
+      });
+    }
   }
 }
 
