@@ -56,7 +56,7 @@ export default createCommand({
         .setLabel("Cancelar")
         .setStyle(ButtonStyle.Danger),
     );
-
+    
     const reply = await interaction.reply({
       content:
         `Tem certeza de que deseja deletar o servidor **${guildDoc.name}** do bando de dados?` +
@@ -73,6 +73,7 @@ export default createCommand({
       time: 60000,
       max: 1,
     });
+
     collector.on("collect", async (interaction) => {
       if (interaction.customId === "collector:cancel") {
         return await interaction.update({
@@ -80,10 +81,12 @@ export default createCommand({
           components: [],
         });
       }
+
       await interaction.update({
         content: "Deletando servidor...",
         components: [],
       });
+      
       if (guildDoc.role) {
         await interaction.guild.roles
           .delete(guildDoc.role)
@@ -103,8 +106,12 @@ export default createCommand({
         if (!member) {
           continue;
         }
+
         if (guildDoc.owner === member.id) {
           const ownedGuildExists = await Guild.exists({
+            _id: {
+              $ne: guildId,
+            },
             owner: member.id,
             pending: {
               $ne: true,
@@ -116,13 +123,18 @@ export default createCommand({
         } else if (memberDoc.admin) {
           const adminStaffs = await Member.find<GuildPopulatedMemberSchemaType>(
             {
+              guild: {
+                $ne: guildId,
+              },
               user: member.id,
               admin: true,
             },
           ).populate("guild");
-          const isStillAdmin = adminStaffs.some(
-            (doc) => doc.guild.pending !== true,
+
+          const isStillAdmin = adminStaffs.some((doc) =>
+            doc.guild.pending !== true
           );
+
           if (!isStillAdmin) {
             await member.roles.remove(config.ids.roles.admin);
           }
@@ -132,21 +144,28 @@ export default createCommand({
             admin: {
               $ne: true,
             },
+            guild: {
+              $ne: guildId,
+            },
           }).populate("guild");
-          const isStillMod = modStaffs.some(
-            (doc) => doc.guild.pending !== true,
+
+          const isStillMod = modStaffs.some((doc) =>
+            doc.guild.pending !== true
           );
+
           if (!isStillMod) {
             await member.roles.remove(config.ids.roles.mod);
           }
         }
       }
+
       await guildDoc.deleteOne();
       await Member.deleteMany({ guild: guildId });
       await interaction.editReply({ content: "Servidor deletado" });
-      interaction.client.updateServersData([
-        `<:icon_guild:1037801942149242926> **|** O servidor **${guildDoc.name}** saiu da EPF`,
-      ]);
+      interaction.client.updateServersData(
+        [`<:icon_guild:1037801942149242926> **|** O servidor **${guildDoc.name}** saiu da EPF`],
+        false,
+      );
     });
     collector.on("end", async (_, reason) => {
       if (reason === "time") {
