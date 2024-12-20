@@ -38,4 +38,5 @@ module.exports = {
     suggestionsChannel: '1025927402800558090',
     pendingTag: '1040402827064922155',
     guildsChangeLog: "1049034683968663612",
+    guestRole: "921091439876780052"
 };
