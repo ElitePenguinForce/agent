@@ -4,7 +4,10 @@ export class ChunkedString {
   constructor(private readonly maxLength: number) {}
 
   public addLine(str: string) {
-    if (!this.lastChunk() || this.lastChunk()!.length + str.length >= this.maxLength) {
+    if (
+      !this.lastChunk() ||
+      this.lastChunk()!.length + str.length >= this.maxLength
+    ) {
       this.chunks.push(str);
     } else {
       // @ts-expect-error already checked if lastChunk is defined

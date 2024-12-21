@@ -7,8 +7,15 @@ export default createEvent({
     if (!newlyCreated) {
       return;
     }
-    
-    if (thread.partial) await thread.fetch();
-    if (thread.parentId === config.ids.channels.suggestions) await thread.setAppliedTags([config.ids.tags.pending]);
+
+    // fuck it, I don't trust this type
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (thread.partial) {
+      await thread.fetch();
+    }
+
+    if (thread.parentId === config.ids.channels.suggestions) {
+      await thread.setAppliedTags([config.ids.tags.pending]);
+    }
   },
 });

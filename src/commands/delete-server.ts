@@ -56,7 +56,7 @@ export default createCommand({
         .setLabel("Cancelar")
         .setStyle(ButtonStyle.Danger),
     );
-    
+
     const reply = await interaction.reply({
       content:
         `Tem certeza de que deseja deletar o servidor **${guildDoc.name}** do bando de dados?` +
@@ -86,7 +86,7 @@ export default createCommand({
         content: "Deletando servidor...",
         components: [],
       });
-      
+
       if (guildDoc.role) {
         await interaction.guild.roles
           .delete(guildDoc.role)
@@ -131,8 +131,8 @@ export default createCommand({
             },
           ).populate("guild");
 
-          const isStillAdmin = adminStaffs.some((doc) =>
-            doc.guild.pending !== true
+          const isStillAdmin = adminStaffs.some(
+            (doc) => doc.guild.pending !== true,
           );
 
           if (!isStillAdmin) {
@@ -149,8 +149,8 @@ export default createCommand({
             },
           }).populate("guild");
 
-          const isStillMod = modStaffs.some((doc) =>
-            doc.guild.pending !== true
+          const isStillMod = modStaffs.some(
+            (doc) => doc.guild.pending !== true,
           );
 
           if (!isStillMod) {
@@ -163,7 +163,9 @@ export default createCommand({
       await Member.deleteMany({ guild: guildId });
       await interaction.editReply({ content: "Servidor deletado" });
       interaction.client.updateServersData(
-        [`<:icon_guild:1037801942149242926> **|** O servidor **${guildDoc.name}** saiu da EPF`],
+        [
+          `<:icon_guild:1037801942149242926> **|** O servidor **${guildDoc.name}** saiu da EPF`,
+        ],
         false,
       );
     });
