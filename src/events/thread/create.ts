@@ -9,7 +9,7 @@ export default createEvent({
     }
 
     // fuck it, I don't trust this type
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
     if (thread.partial) {
       await thread.fetch();
     }

@@ -1,7 +1,4 @@
-import type {
-  ButtonInteraction,
-  ChatInputCommandInteraction,
-} from "discord.js";
+import type { ButtonInteraction } from "discord.js";
 
 export default async function handleButtonInteraction(
   interaction: ButtonInteraction,

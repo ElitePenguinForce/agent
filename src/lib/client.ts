@@ -18,7 +18,6 @@ import type { Modal } from "./types/modal.js";
 import type { UserContext } from "./types/user-context.js";
 
 declare module "discord.js" {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface Client {
     autocompletes: Collection<string, Autocomplete>;
     commands: Collection<string, Command>;

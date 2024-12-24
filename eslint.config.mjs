@@ -1,17 +1,16 @@
-import typescriptEslint from "@typescript-eslint/eslint-plugin";
+import tsPlugin from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 
 export default [
   {
+    files: ["**/*.ts"],
     plugins: {
-      "@typescript-eslint": typescriptEslint,
+      "@typescript-eslint": tsPlugin,
     },
-
     languageOptions: {
       parser: tsParser,
       ecmaVersion: 5,
       sourceType: "script",
-
       parserOptions: {
         project: true,
         tsconfigRootDir: "./",
@@ -26,11 +25,8 @@ export default [
       ".env",
       ".env.*",
     ],
-  },
-  {
-    files: ["**/*.ts"],
-
     rules: {
+      ...tsPlugin.configs.recommended.rules,
       "no-cond-assign": ["error", "always"],
       eqeqeq: ["error"],
       "no-constant-binary-expression": "error",
@@ -48,23 +44,6 @@ export default [
       "prefer-spread": "error",
       "no-empty": "error",
       "no-useless-catch": "error",
-      "@typescript-eslint/array-type": "error",
-      "@typescript-eslint/consistent-type-definitions": ["error", "type"],
-      "@typescript-eslint/no-unnecessary-condition": "error",
-      "@typescript-eslint/prefer-includes": "error",
-      "@typescript-eslint/prefer-optional-chain": "error",
-      "@typescript-eslint/prefer-reduce-type-parameter": "error",
-      "@typescript-eslint/prefer-string-starts-ends-with": "error",
-      "@typescript-eslint/no-empty-object-type": "error",
-      "@typescript-eslint/no-unsafe-function-type": "error",
-      "@typescript-eslint/no-wrapper-object-types": "error",
-      "@typescript-eslint/no-explicit-any": "error",
-      "@typescript-eslint/no-for-in-array": "error",
-      "@typescript-eslint/no-unsafe-call": "error",
-      "@typescript-eslint/no-unsafe-return": "error",
-      "@typescript-eslint/no-var-requires": "error",
-      "@typescript-eslint/restrict-plus-operands": "error",
-      "@typescript-eslint/consistent-type-imports": "error",
     },
   },
 ];
