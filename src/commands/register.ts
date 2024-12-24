@@ -61,6 +61,13 @@ export default createCommand({
       });
     }
 
+    if (member.user.bot) {
+      return interaction.reply({
+        content: "Não é possível adicionar bots a uma equipe",
+        ephemeral: true,
+      });
+    }
+
     const guildId = interaction.options.getString("server", true);
     const guildDoc = await Guild.findById(guildId);
     if (!guildDoc) {
