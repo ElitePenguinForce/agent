@@ -10,7 +10,7 @@
     "format": "prettier . --write",
     "lint": "eslint . --fix",
     "check": "npm run format && npm run lint && tsc --noEmit",
-    "start": "node --enable-source-maps --env-file .env ./dist/index.js"
+    "start": "node --enable-source-maps --env-file .env ."
   },
   "engines": {
     "node": ">=20.0.6"
