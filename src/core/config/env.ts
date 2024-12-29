@@ -1,13 +1,19 @@
-const env = {
-  MONGOURL: process.env.MONGOURL as string,
-  DISCORD_TOKEN: process.env.DISCORD_TOKEN as string,
-  OFFTOPIC_WEBHOOK: process.env.OFFTOPIC_WEBHOOK as string,
-};
-
-for (const key in env) {
-  if (typeof env[key as keyof typeof env] === "undefined") {
-    throw new Error(`${key} is not defined`);
+function createEnv<T extends Record<string, string | undefined>>(
+  vars: T,
+): Record<keyof T, string> {
+  for (const key in vars) {
+    if (typeof vars[key] === "undefined") {
+      throw new Error(`${key} is not defined`);
+    }
   }
+
+  return vars as Record<keyof T, string>;
 }
+
+const env = createEnv({
+  MONGOURL: process.env.MONGOURL,
+  DISCORD_TOKEN: process.env.DISCORD_TOKEN,
+  OFFTOPIC_WEBHOOK: process.env.OFFTOPIC_WEBHOOK,
+});
 
 export default env;
