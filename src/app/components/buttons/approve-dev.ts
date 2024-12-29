@@ -5,11 +5,9 @@ import createButton from "../../../shared/factories/buttons/index.js";
 
 export default createButton({
   id: "approve-dev-request",
-  create: () => {
-    return {
-      label: "Aprovar",
-      style: ButtonStyle.Success,
-    };
+  data: {
+    label: "Aprovar",
+    style: ButtonStyle.Success,
   },
   execute: async (interaction, userId) => {
     if (!userId) {

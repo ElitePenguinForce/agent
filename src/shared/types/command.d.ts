@@ -23,12 +23,24 @@ type Choise<T extends string | number> = {
 };
 
 type AutocompletableOption = {
+  /**
+   * @description The function that will be executed when then option's autocomplete is triggered 
+   */
   autocomplete: AutocompleteExecute;
+  /**
+   * @description Choices are not allowed for autocomplete options
+   */
   choices?: never;
 };
 
 type ChoosableOption<T extends string | number> = {
+  /**
+   * @description The choices for the option
+   */
   choices: Choise<T>[];
+  /**
+   * @description Autocomplete is not allowed for choosable options
+   */
   autocomplete?: never;
 };
 

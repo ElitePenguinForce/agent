@@ -3,7 +3,15 @@ import CommandService from "./CommandService.js";
 import ComponentsService from "./ComponentsService.js";
 import ContextService from "./ContextService.js";
 
+/**
+ * @description The service that handles the interactions
+ */
 class InteractionService {
+  /**
+   * @description Handles the interaction
+   *
+   * @param interaction The interaction
+   */
   public handleInteraction(interaction: Interaction) {
     if (interaction.isChatInputCommand()) {
       return CommandService.handleCommandInteraction(interaction);

@@ -4,6 +4,11 @@ import Constants from "../../core/db/models/constants.js";
 import Guild from "../../core/db/models/guild.js";
 import { ALMOST_TWO_WEEKS, ALPHABET } from "../constants.js";
 
+/**
+ * Updates the server list channel
+ *
+ * @param client The client that is running the bot
+ */
 export default async function updateServerList(client: Client) {
   await Constants.updateConstants({
     updatingGuildsChannel: true,

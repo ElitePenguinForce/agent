@@ -12,8 +12,25 @@ import type {
 } from "../../types/command.js";
 
 type Options<C extends CacheType> = {
+  /**
+   * @description The command data used to create the command
+   * @example
+   * ```ts
+   * {
+   *    name: "ping",
+   *    description: "Pings the bot",
+   * }
+   * ```
+   */
   data: CommandData & { options?: CommandOption[] };
+  /**
+   * @description Whether the command should be active or not
+   * @default true
+   */
   active?: boolean;
+  /**
+   * @description The function that will be executed when the command is used
+   */
   execute: (
     interaction: ChatInputCommandInteraction<C>,
   ) => Promise<unknown> | unknown;

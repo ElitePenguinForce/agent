@@ -6,6 +6,11 @@ type Options = {
   roleId: string;
 };
 
+/**
+ * Deletes a guild role and updates the guild's role in the database
+ *
+ * @param options The options to delete the guild role
+ */
 export default async function deleteGuildRole(options: Options) {
   const { guild, roleId } = options;
 

@@ -7,11 +7,9 @@ import createButton from "../../../shared/factories/buttons/index.js";
 
 export default createButton({
   id: "approve-server-form",
-  create: () => {
-    return {
-      label: "Aprovar",
-      style: ButtonStyle.Success,
-    };
+  data: {
+    label: "Aprovar",
+    style: ButtonStyle.Success,
   },
   async execute(interaction, guildId) {
     const messageEmbed = interaction.message.embeds[0];

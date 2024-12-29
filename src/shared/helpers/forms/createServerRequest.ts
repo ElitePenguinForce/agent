@@ -12,6 +12,15 @@ import Guild from "../../../core/db/models/guild.js";
 import Member from "../../../core/db/models/member.js";
 import type { ReadableStaffRole } from "../../types/index.js";
 
+/**
+ * Creates a server request
+ *
+ * Sends a message to the user and sends an embed to the approve channel
+ *
+ * @param interaction The interaction that triggered the request
+ * @param role The role of the user
+ * @param invite The invite of the guild
+ */
 export default async function createRequest(
   interaction: ModalSubmitInteraction<"cached">,
   role: ReadableStaffRole | null,

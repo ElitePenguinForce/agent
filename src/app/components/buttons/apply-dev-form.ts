@@ -5,12 +5,10 @@ import devRoleRequestModal from "../modals/dev-form.js";
 
 export default createButton({
   id: "request-dev-role-form",
-  create: () => {
-    return {
-      style: ButtonStyle.Secondary,
-      label: "Formulário de Desenvolvedor",
-      emoji: config.forms.dev.emoji,
-    };
+  data: {
+    style: ButtonStyle.Secondary,
+    label: "Formulário de Desenvolvedor",
+    emoji: config.forms.dev.emoji,
   },
   async execute(interaction) {
     return interaction.showModal(devRoleRequestModal.create());

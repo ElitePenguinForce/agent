@@ -2,6 +2,11 @@ import { ChannelType, type Client } from "discord.js";
 import config from "../../core/config/index.js";
 import Constants from "../../core/db/models/constants.js";
 
+/**
+ * Sends the change logs to the change log channel
+ *
+ * @param client The client that is running the bot
+ */
 export default async function sendChangeLogs(client: Client) {
   const constants = await Constants.getConstants();
   if (!constants.updateLogs.length) {

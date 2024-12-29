@@ -4,11 +4,9 @@ import refuseServerRequest from "../modals/refuse-server-reason.js";
 
 export default createButton({
   id: "refuse-server-form",
-  create: () => {
-    return {
-      label: "Recusar",
-      style: ButtonStyle.Danger,
-    };
+  data: {
+    label: "Recusar",
+    style: ButtonStyle.Danger,
   },
   async execute(interaction) {
     return interaction.showModal(refuseServerRequest.create());

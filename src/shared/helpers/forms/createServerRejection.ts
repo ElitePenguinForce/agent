@@ -3,6 +3,14 @@ import config from "../../../core/config/index.js";
 import { autoRejectEmbed } from "../../factories/embeds/autoRejectGuild.js";
 import parseMemberRole from "./parseMemberRole.js";
 
+/**
+ * Creates a server rejection
+ *
+ * Sends a message to the user and sends an embed to the approve channel
+ *
+ * @param interaction The interaction that triggered the rejection
+ * @param errors The errors that caused the rejection
+ */
 export default async function createServerRejection(
   interaction: ModalSubmitInteraction<"cached">,
   errors: string[],

@@ -1,5 +1,11 @@
 import type { ReadableStaffRole } from "../../types/index.js";
 
+/**
+ * Parses the member role
+ *
+ * @param role The role to parse
+ * @returns {ReadableStaffRole | null} The parsed role or null if the role is not valid
+ */
 export default function parseMemberRole(
   role: string,
 ): ReadableStaffRole | null {

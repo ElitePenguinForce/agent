@@ -6,6 +6,9 @@ import type {
 import { getJavascriptPaths, importUsingRoot } from "../shared/helpers/path.js";
 import type { Command } from "../shared/types/command.js";
 
+/**
+ * @description The service that handles the commands
+ */
 class CommandService {
   private commands: Map<string, Command> = new Map();
 

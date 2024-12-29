@@ -6,11 +6,17 @@ import {
 import type { Component, ComponentExecute } from "../types/components.js";
 
 type Props<T extends CacheType = "cached"> = {
+  /**
+   * @description The data of the modal containing the customId, title, and components
+   */
   data: {
     customId: string;
     title: string;
     components: ModalActionRowComponentData[];
   };
+  /**
+   * @description The function that will be executed when the modal is submitted
+   */
   execute: ComponentExecute<"modal", T>;
 };
 

@@ -1,5 +1,5 @@
 import { type APIEmbed, EmbedBuilder } from "discord.js";
 
 export default function createColorlessEmbed(data: APIEmbed) {
-  return new EmbedBuilder(data);
+  return new EmbedBuilder({ ...data, color: 0x2f3136 });
 }

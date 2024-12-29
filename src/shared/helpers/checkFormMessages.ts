@@ -3,6 +3,13 @@ import applyDevButton from "../../app/components/buttons/apply-dev-form.js";
 import applyServerButton from "../../app/components/buttons/apply-server-form.js";
 import config from "../../core/config/index.js";
 
+/**
+ * Checks if the form messages are already sent
+ *
+ * If not, it sends them
+ *
+ * @param client The client that is running the bot
+ */
 export default async function checkFormMessages(client: Client<true>) {
   const guild = client.guilds.cache.get(config.ids.guild);
 

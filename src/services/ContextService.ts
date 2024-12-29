@@ -2,9 +2,18 @@ import type { Interaction } from "discord.js";
 import { getJavascriptPaths, importUsingRoot } from "../shared/helpers/path.js";
 import type { Context, ContextType } from "../shared/types/context.js";
 
+/**
+ * @description The service that handles the contexts
+ */
 class ContextService {
   private contexts: Map<ContextType, Map<string, Context>> = new Map();
 
+  /**
+   * @description Validates the context import
+   *
+   * @param context The context to validate
+   * @param path The path of the context
+   */
   private validateContextImport(
     context: unknown,
     path: string,
@@ -19,6 +28,9 @@ class ContextService {
     }
   }
 
+  /**
+   * @description Loads the contexts
+   */
   public async load() {
     const paths = getJavascriptPaths("./dist/src/app/").filter((path) =>
       path.includes("/contexts/"),
@@ -39,6 +51,13 @@ class ContextService {
     }
   }
 
+  /**
+   * @description Gets a context by its name and type
+   *
+   * @param name The name of the context
+   * @param type The type of the context
+   * @returns The context
+   */
   public getContext(name: string, type: ContextType) {
     if (this.contexts.size === 0) {
       throw new Error("Contexts not loaded");
@@ -47,6 +66,11 @@ class ContextService {
     return this.contexts.get(type)?.get(name);
   }
 
+  /**
+   * @description Gets all the contexts
+   *
+   * @returns The contexts
+   */
   public getContexts() {
     if (this.contexts.size === 0) {
       throw new Error("Contexts not loaded");
@@ -57,6 +81,11 @@ class ContextService {
     ]);
   }
 
+  /**
+   * @description Handles the context interaction
+   *
+   * @param interaction The interaction
+   */
   public async handleContextInteraction(interaction: Interaction) {
     if (!interaction.isContextMenuCommand()) {
       return;

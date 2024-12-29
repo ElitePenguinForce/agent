@@ -8,6 +8,11 @@ type Options = {
   representingDocs: GuildSchemaType[];
 };
 
+/**
+ * Logs when a member leaves a guild while representing another guild
+ *
+ * @param options The options to log the representative exit
+ */
 export default function logRepresentativeExit(options: Options) {
   const { member, representingDocs } = options;
 

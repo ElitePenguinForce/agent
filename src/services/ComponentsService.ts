@@ -9,10 +9,19 @@ import type {
   ComponentType,
 } from "../shared/types/components.js";
 
+/**
+ * @description The service that handles the components
+ */
 class ComponentsService {
   private components: Map<ComponentType, Map<string, AnyComponent>> = new Map();
   private validTypes: ComponentType[] = ["button", "modal"];
 
+  /**
+   * @description Validates the component import
+   *
+   * @param component The component to validate
+   * @param path The path of the component
+   */
   private validateComponentImport(
     component: unknown,
     path: string,
@@ -31,18 +40,33 @@ class ComponentsService {
     }
   }
 
+  /**
+   * @description Gets the component type from the API
+   *
+   * @param type The type of the component
+   * @returns The component type
+   */
   private messageComponentTypeFromAPI(
     type: MessageComponentInteraction["component"]["type"],
   ): ComponentType | null {
     return type === DiscordComponentType.Button ? "button" : null;
   }
 
+  /**
+   * @description Parses the arguments from the customId
+   *
+   * @param customId The customId of the component
+   * @returns The arguments
+   */
   private parseArguments(customId: string): string[] {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, ...args] = customId.split(":");
     return args;
   }
 
+  /**
+   * @description Loads the components
+   */
   public async load() {
     const paths = getJavascriptPaths("./dist/src/app/").filter((path) =>
       path.includes("/components/"),
@@ -63,14 +87,32 @@ class ComponentsService {
     }
   }
 
+  /**
+   * @description Gets a component by its type and id
+   *
+   * @param type The type of the component
+   * @param id The id of the component
+   * @returns The component
+   */
   public getComponent(type: ComponentType, id: string) {
     return this.components.get(type)?.get(id);
   }
 
+  /**
+   * @description Gets all the components of a given type
+   *
+   * @param type The type of the components
+   * @returns The components
+   */
   public getComponents(type: ComponentType) {
     return Array.from(this.components.get(type)?.values() || []);
   }
 
+  /**
+   * @description Handles the component interaction
+   *
+   * @param interaction The interaction
+   */
   public async handleComponentInteraction(interaction: Interaction) {
     if (!interaction.isMessageComponent() && !interaction.isModalSubmit()) {
       return;

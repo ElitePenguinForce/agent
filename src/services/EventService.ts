@@ -1,9 +1,18 @@
 import { getJavascriptPaths, importUsingRoot } from "../shared/helpers/path.js";
 import type { DiscordEvent } from "../shared/types/event.js";
 
+/**
+ * @description The service that handles the events
+ */
 class EventService {
   private events: Map<string, DiscordEvent> = new Map();
 
+  /**
+   * @description Validates the event import
+   *
+   * @param event The event to validate
+   * @param path The path of the event
+   */
   private validateEventImport(
     event: unknown,
     path: string,
@@ -18,6 +27,9 @@ class EventService {
     }
   }
 
+  /**
+   * @description Loads the events
+   */
   public async load() {
     const paths = getJavascriptPaths("./dist/src/app/").filter((path) =>
       path.includes("/events/"),
@@ -30,6 +42,12 @@ class EventService {
     }
   }
 
+  /**
+   * @description Gets an event by its name
+   *
+   * @param name The name of the event
+   * @returns The event
+   */
   public getEvent(name: string) {
     if (this.events.size === 0) {
       throw new Error("Events not loaded");
@@ -38,6 +56,11 @@ class EventService {
     return this.events.get(name);
   }
 
+  /**
+   * @description Gets all the events
+   *
+   * @returns The events
+   */
   public getEvents() {
     if (this.events.size === 0) {
       throw new Error("Events not loaded");

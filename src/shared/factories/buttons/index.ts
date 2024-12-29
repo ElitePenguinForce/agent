@@ -29,8 +29,17 @@ type ButtonComponentData =
   | InteractionButtonComponentData;
 
 type Props<C extends CacheType> = {
+  /**
+   * @description The id of the button
+   */
   id: string;
-  create: () => Omit<ButtonComponentData, "customId">;
+  /**
+   * @description The data of the button containing the style, disabled, emoji, and label
+   */
+  data: Omit<ButtonComponentData, "customId">;
+  /**
+   * @description The function to execute the button
+   */
   execute: ComponentExecute<"button", C>;
 };
 
@@ -48,8 +57,7 @@ export default function createButton<C extends CacheType = "cached">(
     type: "button",
     // @ts-expect-error - skill issue
     create: (...args: T) => {
-      const data = props.create();
-
+      const data = props.data;
       if (isButtonWithURL(data)) {
         return {
           url: data.url,

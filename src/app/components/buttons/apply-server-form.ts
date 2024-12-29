@@ -10,12 +10,10 @@ import serverRequestModal from "../modals/server-form.js";
 
 export default createButton({
   id: "register-server-form",
-  create: () => {
-    return {
-      label: "Formulário de Servidor",
-      style: ButtonStyle.Secondary,
-      emoji: config.forms.guild.emoji,
-    };
+  data: {
+    label: "Formulário de Servidor",
+    style: ButtonStyle.Secondary,
+    emoji: config.forms.guild.emoji,
   },
   async execute(interaction) {
     const confirmationEmbed = new EmbedBuilder()
