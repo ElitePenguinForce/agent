@@ -2,10 +2,11 @@
   "name": "agent",
   "version": "1.13.24",
   "description": "",
-  "main": "./src/index.js",
+  "main": "./dist/index.js",
   "scripts": {
-    "test": "node .",
-    "dev": "node --trace-deprecation --env-file .env src/index.js"
+    "dev": "node --trace-deprecation --env-file .env src/index.js",
+    "start": "node --env-file .env .",
+    "build": "rm -rf dist && npx tsc"
   },
   "engines": {
     "node": ">=20.0.0"
@@ -14,10 +15,11 @@
   "author": "ElitePenguinForce",
   "license": "GPL-3.0",
   "dependencies": {
-    "@discordjs/rest": "^1.0.1",
-    "chalk": "^4.1.2",
-    "discord-api-types": "^0.37.1",
-    "discord.js": "^14.14.1",
-    "mongoose": "^6.7.0"
+    "mongoose": "^8.9.2",
+    "seyfert": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
   }
 }

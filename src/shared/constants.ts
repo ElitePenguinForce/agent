@@ -1,0 +1,1 @@
+export const DISCORD_INVITE_PATTERN = /discord(?:(?:app)?\.com\/invite|\.gg(?:\/invite)?)\/(?<code>[\w-]{2,255})/i
