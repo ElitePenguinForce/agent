@@ -1,4 +1,4 @@
-import type { ChatInputCommandInteraction, Interaction } from "discord.js";
+import type { AutocompleteInteraction, ChatInputCommandInteraction, Interaction } from "discord.js";
 import { getJavascriptPaths, importUsingRoot } from "../shared/helpers/path.js";
 import type { Command } from "../shared/types/command.js";
 
@@ -20,7 +20,7 @@ class CommandService {
   }
 
   public async load() {
-    const paths = getJavascriptPaths("./dist/src/features/").filter((path) =>
+    const paths = getJavascriptPaths("./dist/src/app/").filter((path) =>
       path.includes("/commands/"),
     );
 
@@ -45,6 +45,24 @@ class CommandService {
     }
 
     return [...this.commands.values()];
+  }
+
+  /**
+   * Get the autocomplete for a given key
+   * @param key The key to get the autocomplete for, composed by subcommand, subcommand group and option name, separated by dots
+   */
+  public getAutocomplete(commandName: string, key: string) {
+    const command = this.commands.get(commandName);
+    if (!command) {
+      return null;
+    }
+
+    const autocomplete = command.autocomplete?.get(key);
+    if (!autocomplete) {
+      return null;
+    }
+
+    return autocomplete;
   }
 
   public async handleCommandInteraction(interaction: Interaction) {
@@ -77,6 +95,30 @@ class CommandService {
         content: "Ocorreu um erro ao executar este comando.",
         ephemeral: true,
       });
+    }
+  }
+
+  public async handleAutocompleteInteraction(interaction: AutocompleteInteraction) {
+    const command = this.commands.get(interaction.commandName);
+    if (!command) {
+      return;
+    }
+
+    const key = [
+      interaction.options.getSubcommandGroup(false),
+      interaction.options.getSubcommand(false),
+      interaction.options.getFocused(true).name,
+    ].filter(Boolean).join(".");
+
+    const autocomplete = this.getAutocomplete(interaction.commandName, key);
+    if (!autocomplete) {
+      return;
+    }
+
+    try {
+      await autocomplete(interaction as AutocompleteInteraction<"cached">);
+    } catch (error) {
+      console.error(error);
     }
   }
 }

@@ -1,6 +1,7 @@
 import { ApplicationCommandOptionType } from "discord.js";
 import Guild from "../../core/db/models/guild.js";
 import createCommand from "../../shared/factories/commands/index.js";
+import handleServerAutocomplete from "../../shared/helpers/handleServerAutocomplete.js";
 import isGuard from "../../shared/helpers/isGuard.js";
 
 export default createCommand({
@@ -25,7 +26,7 @@ export default createCommand({
           "pt-BR": "O servidor que você deseja alterar o link de convite",
         },
         required: true,
-        autocomplete: true,
+        autocomplete: handleServerAutocomplete,
       },
       {
         type: ApplicationCommandOptionType.String,

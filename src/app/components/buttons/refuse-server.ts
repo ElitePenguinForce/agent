@@ -11,6 +11,6 @@ export default createButton({
     };
   },
   async execute(interaction) {
-    return interaction.showModal(refuseServerRequest.data);
+    return interaction.showModal(refuseServerRequest.create());
   },
 });

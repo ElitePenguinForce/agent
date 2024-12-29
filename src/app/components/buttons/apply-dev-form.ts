@@ -13,6 +13,6 @@ export default createButton({
     };
   },
   async execute(interaction) {
-    return interaction.showModal(devRoleRequestModal.data);
+    return interaction.showModal(devRoleRequestModal.create());
   },
 });

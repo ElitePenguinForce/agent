@@ -20,7 +20,7 @@ class ContextService {
   }
 
   public async load() {
-    const paths = getJavascriptPaths("./dist/src/features/").filter((path) =>
+    const paths = getJavascriptPaths("./dist/src/app/").filter((path) =>
       path.includes("/contexts/"),
     );
 

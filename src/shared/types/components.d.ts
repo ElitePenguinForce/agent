@@ -2,24 +2,26 @@ import type {
   APIButtonComponent,
   ButtonInteraction,
   CacheType,
+  ModalComponentData,
+  ModalSubmitInteraction
 } from "discord.js";
 
-type ComponentType = "button";
+type ComponentType = "button" | "modal";
 type ComponentData<T extends ComponentType> = T extends "button"
   ? APIButtonComponent
-  : undefined;
-type ComponentInteraction<T extends ComponentType> = T extends "button"
-  ? ButtonInteraction
+  : T extends "modal" ? ModalComponentData
   : never;
+type ComponentInteraction<T extends ComponentType, C extends CacheType> =
+  T extends "button" ? ButtonInteraction<C>
+    : T extends "modal" ? ModalSubmitInteraction<C>
+    : never;
 export type ComponentExecute<
   T extends ComponentType,
   C extends CacheType = "cached",
-> = T extends "button"
-  ? (
-      interaction: ButtonInteraction<C>,
-      ...args: string[]
-    ) => Promise<unknown> | unknown
-  : never;
+> = (
+  interaction: ComponentInteraction<T, C>,
+  ...args: string[]
+) => Promise<unknown> | unknown;
 
 export type Component<
   T extends ComponentType,

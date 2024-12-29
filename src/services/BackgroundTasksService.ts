@@ -16,7 +16,7 @@ class BackgroundTasksService {
     }
   }
 
-  public async loadTasks() {
+  public async load() {
     const paths = getJavascriptPaths("./dist/src/app/tasks/");
 
     for (const path of paths) {

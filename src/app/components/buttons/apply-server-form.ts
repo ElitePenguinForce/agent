@@ -61,7 +61,7 @@ export default createButton({
 
     collector.on("collect", async (interaction) => {
       if (interaction.customId === "collector:confirm") {
-        return await interaction.showModal(serverRequestModal.data);
+        return await interaction.showModal(serverRequestModal.create());
       }
 
       return interaction.reply({

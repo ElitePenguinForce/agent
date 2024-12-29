@@ -6,6 +6,7 @@ import Member, {
 } from "../../core/db/models/member.js";
 import createConfirmationButtons from "../../shared/factories/buttons/createConfirmationButtons.js";
 import createCommand from "../../shared/factories/commands/index.js";
+import handleServerAutocomplete from "../../shared/helpers/handleServerAutocomplete.js";
 import isGuard from "../../shared/helpers/isGuard.js";
 
 export default createCommand({
@@ -20,7 +21,7 @@ export default createCommand({
         name: "server",
         description: "Selecione o servidor que será deletado",
         required: true,
-        autocomplete: true,
+        autocomplete: handleServerAutocomplete,
       },
     ],
   },

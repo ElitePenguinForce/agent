@@ -11,7 +11,7 @@ import type {
 
 class ComponentsService {
   private components: Map<ComponentType, Map<string, AnyComponent>> = new Map();
-  private validTypes: ComponentType[] = ["button"];
+  private validTypes: ComponentType[] = ["button", "modal"];
 
   private validateComponentImport(
     component: unknown,
@@ -31,7 +31,7 @@ class ComponentsService {
     }
   }
 
-  private componentTypeFromAPI(
+  private messageComponentTypeFromAPI(
     type: MessageComponentInteraction["component"]["type"],
   ): ComponentType | null {
     return type === DiscordComponentType.Button ? "button" : null;
@@ -44,8 +44,8 @@ class ComponentsService {
   }
 
   public async load() {
-    const paths = getJavascriptPaths("./dist/src/features").filter((path) =>
-      path.includes("/components/"),
+    const paths = getJavascriptPaths("./dist/src/app/").filter((path) =>
+      path.includes("/components/")
     );
 
     for (const path of paths) {
@@ -72,11 +72,13 @@ class ComponentsService {
   }
 
   public async handleComponentInteraction(interaction: Interaction) {
-    if (!interaction.isMessageComponent()) {
+    if (!interaction.isMessageComponent() && !interaction.isModalSubmit()) {
       return;
     }
 
-    const componentType = this.componentTypeFromAPI(interaction.component.type);
+    const componentType = interaction.isModalSubmit()
+      ? "modal"
+      : this.messageComponentTypeFromAPI(interaction.component.type);
 
     if (!componentType) {
       return;

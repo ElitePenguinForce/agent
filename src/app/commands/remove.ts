@@ -5,6 +5,7 @@ import Member, {
   type GuildPopulatedMemberSchemaType,
 } from "../../core/db/models/member.js";
 import createCommand from "../../shared/factories/commands/index.js";
+import handleServerAutocomplete from "../../shared/helpers/handleServerAutocomplete.js";
 import isGuard from "../../shared/helpers/isGuard.js";
 
 export default createCommand({
@@ -24,8 +25,8 @@ export default createCommand({
         type: ApplicationCommandOptionType.String,
         name: "server",
         description: "De qual das suas equipes esse membro deve ser removido",
-        autocomplete: true,
         required: true,
+        autocomplete: handleServerAutocomplete,
       },
     ],
   },

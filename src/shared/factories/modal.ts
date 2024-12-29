@@ -1,9 +1,9 @@
 import {
-  ComponentType,
   type CacheType,
+  ComponentType,
   type ModalActionRowComponentData,
 } from "discord.js";
-import type { Modal, ModalExecute } from "../../shared/types/modal.js";
+import type { Component, ComponentExecute } from "../types/components.js";
 
 type Props<T extends CacheType = "cached"> = {
   data: {
@@ -11,19 +11,26 @@ type Props<T extends CacheType = "cached"> = {
     title: string;
     components: ModalActionRowComponentData[];
   };
-  execute: ModalExecute<T>;
+  execute: ComponentExecute<"modal", T>;
 };
 
 export default function createModal<T extends CacheType = "cached">(
   props: Props<T>,
-): Modal<T> {
+): Component<"modal", T> {
   return {
-    data: {
-      ...props.data,
-      components: props.data.components.map((component) => ({
-        type: ComponentType.ActionRow,
-        components: [component],
-      })),
+    id: props.data.customId,
+    type: "modal",
+    create(...args) {
+      return {
+        customId: args.length
+          ? `${props.data.customId}:${args.join(":")}`
+          : props.data.customId,
+        title: props.data.title,
+        components: props.data.components.map((component) => ({
+          type: ComponentType.ActionRow,
+          components: [component],
+        })),
+      };
     },
     execute: props.execute,
   };

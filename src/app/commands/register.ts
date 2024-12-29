@@ -3,8 +3,9 @@ import config from "../../core/config/index.js";
 import Guild from "../../core/db/models/guild.js";
 import Member from "../../core/db/models/member.js";
 import createCommand from "../../shared/factories/commands/index.js";
-import type { StaffRole } from "../../shared/types/index.js";
+import handleServerAutocomplete from "../../shared/helpers/handleServerAutocomplete.js";
 import isGuard from "../../shared/helpers/isGuard.js";
+import type { StaffRole } from "../../shared/types/index.js";
 
 export default createCommand({
   data: {
@@ -24,7 +25,7 @@ export default createCommand({
         name: "server",
         description: "Em qual das suas equipes esse membro deve ser registrado",
         required: true,
-        autocomplete: true,
+        autocomplete: handleServerAutocomplete,
       },
       {
         type: ApplicationCommandOptionType.String,
