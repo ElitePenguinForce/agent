@@ -1,4 +1,8 @@
-import type { AutocompleteInteraction, ChatInputCommandInteraction, Interaction } from "discord.js";
+import type {
+  AutocompleteInteraction,
+  ChatInputCommandInteraction,
+  Interaction,
+} from "discord.js";
 import { getJavascriptPaths, importUsingRoot } from "../shared/helpers/path.js";
 import type { Command } from "../shared/types/command.js";
 
@@ -98,7 +102,9 @@ class CommandService {
     }
   }
 
-  public async handleAutocompleteInteraction(interaction: AutocompleteInteraction) {
+  public async handleAutocompleteInteraction(
+    interaction: AutocompleteInteraction,
+  ) {
     const command = this.commands.get(interaction.commandName);
     if (!command) {
       return;
@@ -108,7 +114,9 @@ class CommandService {
       interaction.options.getSubcommandGroup(false),
       interaction.options.getSubcommand(false),
       interaction.options.getFocused(true).name,
-    ].filter(Boolean).join(".");
+    ]
+      .filter(Boolean)
+      .join(".");
 
     const autocomplete = this.getAutocomplete(interaction.commandName, key);
     if (!autocomplete) {

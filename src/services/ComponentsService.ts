@@ -45,7 +45,7 @@ class ComponentsService {
 
   public async load() {
     const paths = getJavascriptPaths("./dist/src/app/").filter((path) =>
-      path.includes("/components/")
+      path.includes("/components/"),
     );
 
     for (const path of paths) {

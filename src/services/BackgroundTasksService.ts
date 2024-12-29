@@ -5,7 +5,10 @@ import type { Task } from "../shared/types/task.js";
 class BackgroundTasksService {
   private tasks: Map<string, Task> = new Map();
 
-  private validateTaskImport(task: unknown, path: string): asserts task is Task {
+  private validateTaskImport(
+    task: unknown,
+    path: string,
+  ): asserts task is Task {
     if (
       typeof task !== "object" ||
       task === null ||
@@ -61,7 +64,7 @@ class BackgroundTasksService {
       this.handleTaskExecution(task.data.name, client);
 
       console.log(`Task ${task.data.name} started`);
-      
+
       setInterval(() => {
         this.handleTaskExecution(task.data.name, client);
       }, task.data.interval);

@@ -32,24 +32,20 @@ type ChoosableOption<T extends string | number> = {
   autocomplete?: never;
 };
 
-type BaseStringOption =
-  & BaseOption
-  & {
-    minLength?: number;
-    maxLength?: number;
-    type: ApplicationCommandOptionType.String;
-  };
+type BaseStringOption = BaseOption & {
+  minLength?: number;
+  maxLength?: number;
+  type: ApplicationCommandOptionType.String;
+};
 
 type AutocompletableStringOption = BaseStringOption & AutocompletableOption;
 type ChoosableStringOption = BaseStringOption & ChoosableOption<string>;
 
-type BaseNumberOption =
-  & BaseOption
-  & {
-    minValue?: number;
-    maxValue?: number;
-    type: ApplicationCommandOptionType.Number;
-  };
+type BaseNumberOption = BaseOption & {
+  minValue?: number;
+  maxValue?: number;
+  type: ApplicationCommandOptionType.Number;
+};
 
 type AutocompletableNumberOption = BaseNumberOption & AutocompletableOption;
 type ChoosableNumberOption = BaseNumberOption & ChoosableOption<number>;
