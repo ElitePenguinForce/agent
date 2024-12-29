@@ -10,8 +10,7 @@ export class ChunkedString {
     ) {
       this.chunks.push(str);
     } else {
-      // @ts-expect-error already checked if lastChunk is defined
-      this.lastChunk() += `\n${str}`;
+      this.chunks[this.chunks.length - 1] += `\n${str}`;
     }
   }
 
