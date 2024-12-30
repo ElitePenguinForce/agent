@@ -24,6 +24,7 @@ export default createUserContext({
     if (!memberDocs.length) {
       return interaction.reply({
         content: "O usuário não faz parte de nenhuma staff!",
+        ephemeral: true,
       });
     }
 
