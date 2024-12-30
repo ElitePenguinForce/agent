@@ -56,12 +56,10 @@ class ComponentsService {
    * @description Parses the arguments from the customId
    *
    * @param customId The customId of the component
-   * @returns The arguments
    */
-  private parseArguments(customId: string): string[] {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [_, ...args] = customId.split(":");
-    return args;
+  private parseArguments(customId: string) {
+    const [id, ...args] = customId.split(":");
+    return { id: id || customId, args };
   }
 
   /**
@@ -126,13 +124,12 @@ class ComponentsService {
       return;
     }
 
-    const component = this.getComponent(componentType, interaction.customId);
+    const { id, args } = this.parseArguments(interaction.customId);
+    const component = this.getComponent(componentType, id);
 
     if (!component) {
       return;
     }
-
-    const args = this.parseArguments(interaction.customId);
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
