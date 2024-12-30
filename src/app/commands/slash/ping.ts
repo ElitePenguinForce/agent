@@ -1,4 +1,4 @@
-import createCommand from "../../shared/factories/commands/index.js";
+import createCommand from "../../../shared/factories/commands/index.js";
 
 export default createCommand({
   data: {

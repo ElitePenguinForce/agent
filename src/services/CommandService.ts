@@ -1,21 +1,24 @@
-import type {
-  AutocompleteInteraction,
-  ChatInputCommandInteraction,
-  Interaction,
+import {
+  ApplicationCommandType,
+  type AutocompleteInteraction,
+  type Interaction,
 } from "discord.js";
 import { getJavascriptPaths, importUsingRoot } from "../shared/helpers/path.js";
-import type { Command } from "../shared/types/command.js";
+import type { Command, CommandType } from "../shared/types/command.js";
 
 /**
  * @description The service that handles the commands
  */
 class CommandService {
-  private commands: Map<string, Command> = new Map();
+  private commands: Map<
+    ApplicationCommandType,
+    Map<string, Command<CommandType>>
+  > = new Map();
 
   private validateCommandImport(
     command: unknown,
     path: string,
-  ): asserts command is Command {
+  ): asserts command is Command<CommandType> {
     if (
       typeof command !== "object" ||
       command === null ||
@@ -34,16 +37,30 @@ class CommandService {
     for (const path of paths) {
       const command = (await importUsingRoot(path)).default;
       this.validateCommandImport(command, path);
-      this.commands.set(command.data.name, command);
+
+      if (!command.data.type) {
+        console.warn(`Command ${command.data.name} has no type`);
+        continue;
+      }
+
+      if (this.commands.has(command.data.type)) {
+        this.commands.get(command.data.type)!.set(command.data.name, command);
+        continue;
+      }
+
+      this.commands.set(
+        command.data.type,
+        new Map([[command.data.name, command]]),
+      );
     }
   }
 
-  public getCommand(name: string) {
+  public getCommand(type: ApplicationCommandType, name: string) {
     if (this.commands.size === 0) {
       throw new Error("Commands not loaded");
     }
 
-    return this.commands.get(name);
+    return this.commands.get(type)?.get(name);
   }
 
   public getCommands() {
@@ -51,7 +68,9 @@ class CommandService {
       throw new Error("Commands not loaded");
     }
 
-    return [...this.commands.values()];
+    return [...this.commands.values()].flatMap((commands) => [
+      ...commands.values(),
+    ]);
   }
 
   /**
@@ -59,7 +78,9 @@ class CommandService {
    * @param key The key to get the autocomplete for, composed by subcommand, subcommand group and option name, separated by dots
    */
   public getAutocomplete(commandName: string, key: string) {
-    const command = this.commands.get(commandName);
+    const command = this.commands
+      .get(ApplicationCommandType.ChatInput)
+      ?.get(commandName);
     if (!command) {
       return null;
     }
@@ -73,11 +94,13 @@ class CommandService {
   }
 
   public async handleCommandInteraction(interaction: Interaction) {
-    if (!interaction.isChatInputCommand()) {
+    if (!interaction.isCommand()) {
       return;
     }
 
-    const command = this.commands.get(interaction.commandName);
+    const command = this.commands
+      .get(interaction.commandType)
+      ?.get(interaction.commandName);
     if (!command) {
       return;
     }
@@ -89,9 +112,8 @@ class CommandService {
     }
 
     try {
-      await command.execute(
-        interaction as ChatInputCommandInteraction<"cached">,
-      );
+      // @ts-expect-error just ignore this error
+      await command.execute(interaction);
     } catch (error) {
       console.error(error);
 
@@ -108,11 +130,6 @@ class CommandService {
   public async handleAutocompleteInteraction(
     interaction: AutocompleteInteraction,
   ) {
-    const command = this.commands.get(interaction.commandName);
-    if (!command) {
-      return;
-    }
-
     const key = [
       interaction.options.getSubcommandGroup(false),
       interaction.options.getSubcommand(false),

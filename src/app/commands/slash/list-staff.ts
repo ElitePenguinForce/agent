@@ -1,8 +1,8 @@
 import { ApplicationCommandOptionType, EmbedBuilder } from "discord.js";
-import Guild from "../../core/db/models/guild.js";
-import Member from "../../core/db/models/member.js";
-import createCommand from "../../shared/factories/commands/index.js";
-import handleServerAutocomplete from "../../shared/helpers/handleServerAutocomplete.js";
+import Guild from "../../../core/db/models/guild.js";
+import Member from "../../../core/db/models/member.js";
+import createCommand from "../../../shared/factories/commands/index.js";
+import handleServerAutocomplete from "../../../shared/helpers/handleServerAutocomplete.js";
 
 export default createCommand({
   data: {

@@ -22,7 +22,7 @@ type Options<C extends CacheType> = {
    * }
    * ```
    */
-  data: CommandData & { options?: CommandOption[] };
+  data: Omit<CommandData<"chat">, "options"> & { options?: CommandOption[] };
   /**
    * @description Whether the command should be active or not
    * @default true
@@ -76,7 +76,7 @@ function mapAutocompleteOptions(
 
 export default function createCommand<C extends CacheType = "cached">(
   command: Options<C>,
-): Command<C> {
+): Command<"chat", C> {
   return {
     data: {
       dmPermission: false,

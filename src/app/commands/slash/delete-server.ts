@@ -1,13 +1,13 @@
 import { ApplicationCommandOptionType } from "discord.js";
-import config from "../../core/config/index.js";
-import Guild from "../../core/db/models/guild.js";
+import config from "../../../core/config/index.js";
+import Guild from "../../../core/db/models/guild.js";
 import Member, {
   type GuildPopulatedMemberSchemaType,
-} from "../../core/db/models/member.js";
-import createConfirmationButtons from "../../shared/factories/buttons/createConfirmationButtons.js";
-import createCommand from "../../shared/factories/commands/index.js";
-import handleServerAutocomplete from "../../shared/helpers/handleServerAutocomplete.js";
-import isGuard from "../../shared/helpers/isGuard.js";
+} from "../../../core/db/models/member.js";
+import createConfirmationButtons from "../../../shared/factories/buttons/createConfirmationButtons.js";
+import createCommand from "../../../shared/factories/commands/index.js";
+import handleServerAutocomplete from "../../../shared/helpers/handleServerAutocomplete.js";
+import isGuard from "../../../shared/helpers/isGuard.js";
 
 export default createCommand({
   data: {

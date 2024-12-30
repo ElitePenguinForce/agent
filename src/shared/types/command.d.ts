@@ -6,6 +6,10 @@ import type {
   ChatInputApplicationCommandData,
   ChatInputCommandInteraction,
   LocalizationMap,
+  MessageApplicationCommandData,
+  MessageContextMenuCommandInteraction,
+  UserApplicationCommandData,
+  UserContextMenuCommandInteraction,
 } from "discord.js";
 import type { AutocompleteExecute } from "./autocomplete.js";
 
@@ -24,7 +28,7 @@ type Choise<T extends string | number> = {
 
 type AutocompletableOption = {
   /**
-   * @description The function that will be executed when then option's autocomplete is triggered 
+   * @description The function that will be executed when then option's autocomplete is triggered
    */
   autocomplete: AutocompleteExecute;
   /**
@@ -111,17 +115,36 @@ export type AutocompleteExecute<C extends CacheType = "cached"> = (
   interaction: AutocompleteInteraction<C>,
 ) => Promise<unknown> | unknown;
 
-export type CommandData = Omit<ChatInputApplicationCommandData, "options">;
+type CommandType = "chat" | "user" | "message";
+type CommandData<T extends CommandType> = T extends "chat"
+  ? ChatInputApplicationCommandData
+  : T extends "user"
+    ? UserApplicationCommandData
+    : T extends "message"
+      ? MessageApplicationCommandData
+      : never;
+type CommandExecute<
+  T extends CommandType,
+  C extends CacheType = "cached",
+> = T extends "chat"
+  ? (interaction: ChatInputCommandInteraction<C>) => unknown | Promise<unknown>
+  : T extends "user"
+    ? (
+        interaction: UserContextMenuCommandInteraction<C>,
+      ) => unknown | Promise<unknown>
+    : T extends "message"
+      ? (
+          interaction: MessageContextMenuCommandInteraction<C>,
+        ) => unknown | Promise<unknown>
+      : never;
 
-export type Command<C extends CacheType = "cached"> = {
-  data: ChatInputApplicationCommandData;
+export type Command<T extends CommandType, C extends CacheType = "cached"> = {
+  data: CommandData<T>;
   /**
    * Whether the command should be active or not
    * @default true
    */
   active?: boolean;
-  autocomplete?: Map<string, AutocompleteExecute>;
-  execute: (
-    interaction: ChatInputCommandInteraction<C>,
-  ) => unknown | Promise<unknown>;
+  autocomplete?: T extends "chat" ? Map<string, AutocompleteExecute> : never;
+  execute: CommandExecute<T, C>;
 };

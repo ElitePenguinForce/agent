@@ -1,8 +1,6 @@
 import { Client, type ClientOptions } from "discord.js";
 import CommandService from "../../services/CommandService.js";
-import ContextService from "../../services/ContextService.js";
 import EventService from "../../services/EventService.js";
-import InteractionService from "../../services/InteractionService.js";
 import safeCall from "../../shared/helpers/safeCall.js";
 import sendChangeLogs from "../../shared/helpers/sendChangeLogs.js";
 import updateServerList from "../../shared/helpers/updateServersList.js";
@@ -30,10 +28,6 @@ export default class Agent<T extends boolean = false> extends Client<T> {
         safeCall(event.execute, ...args);
       });
     }
-
-    this.on("interactionCreate", (...args) =>
-      InteractionService.handleInteraction(...args),
-    );
   }
 
   public override async login(token?: string) {
@@ -91,7 +85,6 @@ export default class Agent<T extends boolean = false> extends Client<T> {
   public async updateCommands() {
     await this.application?.commands.set([
       ...CommandService.getCommands().map((command) => command.data),
-      ...ContextService.getContexts().map((context) => context.data),
     ]);
   }
 }

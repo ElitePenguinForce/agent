@@ -1,8 +1,8 @@
-import config from "../../core/config/index.js";
-import Member from "../../core/db/models/member.js";
-import { MAX_MESSAGE_CONTENT_LENGTH } from "../../shared/constants.js";
-import createCommand from "../../shared/factories/commands/index.js";
-import { ChunkedString } from "../../shared/helpers/ChunkedString.js";
+import config from "../../../core/config/index.js";
+import Member from "../../../core/db/models/member.js";
+import { MAX_MESSAGE_CONTENT_LENGTH } from "../../../shared/constants.js";
+import createCommand from "../../../shared/factories/commands/index.js";
+import { ChunkedString } from "../../../shared/helpers/ChunkedString.js";
 
 export default createCommand({
   data: {

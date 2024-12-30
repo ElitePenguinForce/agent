@@ -1,33 +1,42 @@
 import type { Interaction } from "discord.js";
 import CommandService from "./CommandService.js";
 import ComponentsService from "./ComponentsService.js";
-import ContextService from "./ContextService.js";
 
 /**
  * @description The service that handles the interactions
  */
 class InteractionService {
   /**
-   * @description Handles the interaction
+   * @description Handles the incoming interaction
    *
-   * @param interaction The interaction
+   * @param interaction The interaction to handle
    */
-  public handleInteraction(interaction: Interaction) {
-    if (interaction.isChatInputCommand()) {
-      return CommandService.handleCommandInteraction(interaction);
-    }
+  public async handleInteraction(interaction: Interaction) {
+    try {
+      if (interaction.isCommand()) {
+        await CommandService.handleCommandInteraction(interaction);
+        return;
+      }
 
-    if (interaction.isContextMenuCommand()) {
-      return ContextService.handleContextInteraction(interaction);
-    }
+      if (interaction.isAutocomplete()) {
+        await CommandService.handleAutocompleteInteraction(interaction);
+        return;
+      }
 
-    if (interaction.isAutocomplete()) {
-      return CommandService.handleAutocompleteInteraction(interaction);
+      if (interaction.isMessageComponent() || interaction.isModalSubmit()) {
+        await ComponentsService.handleComponentInteraction(interaction);
+        return;
+      }
+    } catch (error) {
+      console.error(error);
     }
+  }
 
-    if (interaction.isMessageComponent() || interaction.isModalSubmit()) {
-      return ComponentsService.handleComponentInteraction(interaction);
-    }
+  /**
+   * @description Loads the interaction service, with the command and component services
+   */
+  public load() {
+    return Promise.all([CommandService.load(), ComponentsService.load()]);
   }
 }
 

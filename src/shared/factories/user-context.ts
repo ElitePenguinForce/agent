@@ -2,7 +2,7 @@ import {
   ApplicationCommandType,
   type UserApplicationCommandData,
 } from "discord.js";
-import type { UserContext, UserContextExecute } from "../types/context.js";
+import type { Command, CommandExecute } from "../types/command.js";
 
 type Props = {
   /**
@@ -12,10 +12,10 @@ type Props = {
   /**
    * @description The function that will be executed when the user context is executed
    */
-  execute: UserContextExecute;
+  execute: CommandExecute<"user", "cached">;
 };
 
-export default function createUserContext(props: Props): UserContext {
+export default function createUserContext(props: Props): Command<"user"> {
   return {
     data: {
       ...props.data,

@@ -16,10 +16,8 @@
 import client from "./core/client/index.js";
 import * as db from "./core/db/index.js";
 import BackgroundTasksService from "./services/BackgroundTasksService.js";
-import CommandService from "./services/CommandService.js";
-import ComponentsService from "./services/ComponentsService.js";
-import ContextService from "./services/ContextService.js";
 import EventService from "./services/EventService.js";
+import InteractionService from "./services/InteractionService.js";
 
 async function main() {
   console.time("Bot startup");
@@ -27,9 +25,7 @@ async function main() {
   await Promise.all([
     db.connect(),
     BackgroundTasksService.load(),
-    CommandService.load(),
-    ComponentsService.load(),
-    ContextService.load(),
+    InteractionService.load(),
     EventService.load(),
   ]);
 

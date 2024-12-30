@@ -1,6 +1,6 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
-import Constants from "../../core/db/models/constants.js";
-import createCommand from "../../shared/factories/commands/index.js";
+import Constants from "../../../core/db/models/constants.js";
+import createCommand from "../../../shared/factories/commands/index.js";
 
 export default createCommand({
   data: {
