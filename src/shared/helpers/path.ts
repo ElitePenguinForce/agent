@@ -1,4 +1,5 @@
 import { readdirSync } from "fs";
+import { sep } from "path";
 import { ROOT } from "../constants.js";
 
 /**
@@ -12,7 +13,7 @@ export function deepReadDirectory(dir: string) {
     recursive: true,
     encoding: "utf-8",
     withFileTypes: true,
-  }).map((path) => path.parentPath + "/" + path.name);
+  }).map((path) => `${path.parentPath}/${path.name}`.replaceAll(sep, "/"));
 }
 
 /**
