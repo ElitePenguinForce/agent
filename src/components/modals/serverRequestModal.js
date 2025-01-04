@@ -1,45 +1,53 @@
 
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require ('discord.js')
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js')
 const config = require('../../config');
 
 module.exports = {
     data: {
         name: `serverRequestModal`
     },
-    
+    /**
+     * @param {import('discord.js').ChatInputCommandInteraction} interaction
+     * @param {import('discord.js').Client} client
+     */
     async execute(interaction, client) {
 
         const inviteInput = interaction.fields.getTextInputValue("serverLink");
         const fetchedInvite = await client.fetchInvite(inviteInput)
             .then((invite) => invite)
             .catch(() => null);
-        
+
         const roleInput = interaction.fields.getTextInputValue("serverRole").toLowerCase();
         const parsedRole = roleInput === 'mod' ? 'Moderador' : roleInput === 'adm' ? 'Administrador' : roleInput === 'dono' ? 'Dono' : null;
-        
+
         const serverAbout = interaction.fields.getTextInputValue("serverAbout");
         const epfAbout = interaction.fields.getTextInputValue("epfAbout");
-        
+
         const errors = [];
-        
+
         const guildModel = require('../../models/guild.js');
         if (!fetchedInvite) errors.push("Convite Inválido");
         else {
             if (fetchedInvite._expiresTimestamp) errors.push("Convite Expirável");
             if (fetchedInvite.maxUses) errors.push("Convite com limite de uso");
             const guildDoc = await guildModel.findById(fetchedInvite.guild.id);
-            if(guildDoc){
-                if(guildDoc.pending){
+            if (guildDoc) {
+                if (guildDoc.pending) {
                     return await interaction.reply({
                         content: 'Esse servidor já está em processo de avaliação',
                         ephemeral: true,
                     });
                 }
-                else{
+                else {
                     errors.push('Esse servidor já faz parte da EPF');
                 }
             }
-            if (fetchedInvite.memberCount < 5000 && !fetchedInvite.guild.features.includes("PARTNERED")) {
+            const meetRequirements =
+                fetchedInvite.memberCount >= 5000 ||
+                fetchedInvite.guild.features.includes("PARTNERED") ||
+                fetchedInvite.guild.features.includes("VERIFIED");
+
+            if (!meetRequirements) {
                 errors.push("O servidor não atingiu os requisitos mínimos");
             }
         }
@@ -56,7 +64,7 @@ module.exports = {
         });
 
         const aproveChannel = client.channels.cache.get(config.aproveChannel);
-        
+
         if (errors.length) {
             const embed = new EmbedBuilder()
                 .setTitle("Formulário Recusado")
@@ -72,7 +80,7 @@ module.exports = {
                 ]);
 
             await interaction.member.send({ content: `O seu servidor foi recusado automaticamente pelo seguinte motivo:\n${errors.join("\n")}`, ephemeral: true }).catch(() => null);
-            
+
             return await aproveChannel.send({ embeds: [embed] });
         }
 
@@ -98,7 +106,7 @@ module.exports = {
                     .setLabel("Recusar")
                     .setStyle(ButtonStyle.Danger),
             );
-        
+
         const newGuildDoc = new guildModel({
             _id: fetchedInvite.guild.id,
             representative: interaction.user.id,
@@ -114,7 +122,7 @@ module.exports = {
             guild: newGuildDoc._id,
             admin: ['adm', 'dono'].includes(roleInput),
         });
-        const message = await aproveChannel.send({embeds: [embed], components: [row]});
-        await message.startThread({name: `Server ${fetchedInvite.guild.name}`});
+        const message = await aproveChannel.send({ embeds: [embed], components: [row] });
+        await message.startThread({ name: `Server ${fetchedInvite.guild.name}` });
     }
 }
