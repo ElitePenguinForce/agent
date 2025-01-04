@@ -39,7 +39,9 @@ module.exports = {
                     errors.push('Esse servidor já faz parte da EPF');
                 }
             }
-            if (fetchedInvite.memberCount < 5000) errors.push("O servidor não atingiu os requisitos mínimos");
+            if (fetchedInvite.memberCount < 5000 && !fetchedInvite.guild.features.includes("PARTNERED")) {
+                errors.push("O servidor não atingiu os requisitos mínimos");
+            }
         }
         if (!parsedRole) errors.push(`Cargo Inválido (${roleInput})`);
 
