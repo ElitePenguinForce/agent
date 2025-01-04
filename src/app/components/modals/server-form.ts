@@ -92,7 +92,10 @@ export default createModal({
       errors.push("Convite com limite de uso");
     }
 
-    if (fetchedInvite.memberCount < 5000) {
+    if (
+      fetchedInvite.memberCount < 5000 &&
+      !fetchedInvite.guild.features.includes("PARTNERED")
+    ) {
       errors.push("O servidor não atingiu os requisitos mínimos");
     }
 
