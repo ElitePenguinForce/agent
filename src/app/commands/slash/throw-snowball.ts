@@ -7,7 +7,7 @@ export default createCommand({
     name: "throw-snowball",
     description: "Throw a snowball at someone",
     descriptionLocalizations: {
-      "pt-BR": "Jogue uma bola de neve em alguém"
+      "pt-BR": "Jogue uma bola de neve em alguém",
     },
     dmPermission: false,
     options: [
@@ -16,11 +16,11 @@ export default createCommand({
         name: "user",
         description: "The user to throw the snowball at",
         descriptionLocalizations: {
-          "pt-BR": "O usuário para quem você quer jogar a bola de neve"
+          "pt-BR": "O usuário para quem você quer jogar a bola de neve",
         },
-        required: true
-      }
-    ]
+        required: true,
+      },
+    ],
   },
   async execute(interaction) {
     const target = interaction.options.getUser("user", true);
@@ -32,12 +32,12 @@ export default createCommand({
           description: `**${interaction.user}** jogou uma bola de neve em **${target}**`,
           image: {
             url: "https://i.imgur.com/cPibpID.gif",
-          }
-        })
+          },
+        }),
       ],
       allowedMentions: {
-        users: [target.id]
-      }
-    })
-  }
-})
+        users: [target.id],
+      },
+    });
+  },
+});

@@ -5,7 +5,7 @@ export default createUserContext({
   data: {
     name: "Throw a snowball",
     nameLocalizations: {
-      "pt-BR": "Atire uma bola de neve"
+      "pt-BR": "Atire uma bola de neve",
     },
     dmPermission: true,
   },
@@ -16,15 +16,15 @@ export default createUserContext({
       content: `<@${target.id}>`,
       embeds: [
         createColorlessEmbed({
-          description: `**${interaction.user}** jogou uma bola de neve em **${target}**`,	
+          description: `**${interaction.user}** jogou uma bola de neve em **${target}**`,
           image: {
             url: "https://i.imgur.com/cPibpID.gif",
-          }
-        })
+          },
+        }),
       ],
       allowedMentions: {
-        users: [target.id]
-      }
-    })
+        users: [target.id],
+      },
+    });
   },
-})
+});
